@@ -8,7 +8,7 @@ public class SnowBlockManager : MonoBehaviour {
 
     [SerializeField] private List<GameObject> sensors;
 
-    [SerializeField] private GameObject baseCube;
+    public GameObject baseCube;
 
     private Color startcolor;
 
@@ -18,15 +18,36 @@ public class SnowBlockManager : MonoBehaviour {
     private void Start()
     {
         startcolor = Color.white;
+        //GetComponent<MeshRenderer>().material.color = new Color(255, 255, 255, .5f);
     }
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0) && scrolledOver)
         {
-            Debug.Log("Destroy" + this.name);
-            isDestroyed = true;
-            destroyCube();
+            if(isDestroyed == false)
+            {
+                Debug.Log("Destroy" + this.name);
+                isDestroyed = true;
+                GetComponent<BoxCollider>().enabled = false;
+                GetComponent<SphereCollider>().enabled = true;
+                destroyCube();
+
+            }
+            
+        }
+        else if(Input.GetMouseButtonDown(1) && scrolledOver)
+        {
+            if (isDestroyed == true) ;
+            {
+                Debug.Log("Rebuild" + this.name);
+                isDestroyed = false;
+                GetComponent<BoxCollider>().enabled = true;
+                GetComponent<SphereCollider>().enabled = false;
+
+                BuildSnow();
+
+            }
         }
     }
 
@@ -36,52 +57,72 @@ public class SnowBlockManager : MonoBehaviour {
         
         for(int i = 0; i < BlockManager.instance.blocks.Count; i++)
         {
-            if(BlockManager.instance.blocks[i].transform.position == sensors[2].transform.position)
+            if (sensors[2].transform.position != BlockManager.instance.blocks[i].transform.position || (BlockManager.instance.blocks[i].transform.position == sensors[2].transform.position && BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed))
             {
-                BlockManager.instance.blocks[i].SetActive(false);
-            }
-            else if (BlockManager.instance.blocks[i].transform.position == sensors[0].transform.position)
-            {
-                if(BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed)
+
+
+                if (BlockManager.instance.blocks[i].transform.position == sensors[2].transform.position)
                 {
-                    BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().xN.SetActive(false);
+                    if (BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed)
+                    {
+                        BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().baseCube.SetActive(false);
+                        BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed = true;
+                        BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().zP.SetActive(false);
+                        BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().zN.SetActive(false);
+                        BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().xP.SetActive(false);
+                        BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().xN.SetActive(false);
+
+                    }
+                    else
+                    {
+
+                    }
+
+
                 }
-                else
+                else if (BlockManager.instance.blocks[i].transform.position == sensors[0].transform.position)
                 {
-                    xP.SetActive(true);
+                    if (BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed)
+                    {
+                        BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().xN.SetActive(false);
+                    }
+                    else
+                    {
+                        xP.SetActive(true);
+                    }
                 }
-            }
-            else if (BlockManager.instance.blocks[i].transform.position == sensors[1].transform.position)
-            {
-                if (BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed)
+                else if (BlockManager.instance.blocks[i].transform.position == sensors[1].transform.position)
                 {
-                    BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().xP.SetActive(false);
+                    if (BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed)
+                    {
+                        BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().xP.SetActive(false);
+                    }
+                    else
+                    {
+                        xN.SetActive(true);
+                    }
                 }
-                else
+                else if (BlockManager.instance.blocks[i].transform.position == sensors[4].transform.position)
                 {
-                    xN.SetActive(true);
+                    if (BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed)
+                    {
+                        BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().zN.SetActive(false);
+                    }
+                    else
+                    {
+                        zP.SetActive(true);
+                    }
                 }
-            }
-            else if (BlockManager.instance.blocks[i].transform.position == sensors[4].transform.position)
-            {
-                if (BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed)
+                else if (BlockManager.instance.blocks[i].transform.position == sensors[5].transform.position)
                 {
-                    BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().zN.SetActive(false);
-                }
-                else
-                {
-                    zP.SetActive(true);
-                }
-            }
-            else if (BlockManager.instance.blocks[i].transform.position == sensors[5].transform.position)
-            {
-                if (BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed)
-                {
-                    BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().zP.SetActive(false);
-                }
-                else
-                {
-                    zN.SetActive(true);
+                    if (BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed)
+                    {
+                        BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().zP.SetActive(false);
+                    }
+                    else
+                    {
+                        zN.SetActive(true);
+                    }
                 }
             }
         }
@@ -90,9 +131,45 @@ public class SnowBlockManager : MonoBehaviour {
         //sensors[2].transform.position
     }
 
+    void BuildSnow()
+    {
+        baseCube.SetActive(true);
+        zP.SetActive(false);
+        zN.SetActive(false);
+        xP.SetActive(false);
+        xN.SetActive(false);
+
+        RefreshSlopes();
+
+    }
+
+    public void RefreshSlopes()
+    {
+        for(int i = 0; i < BlockManager.instance.blocks.Count; i++)
+        {
+            if(sensors[4].transform.position == BlockManager.instance.blocks[i].transform.position && BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed)
+            {
+                BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().zN.SetActive(true);
+            }
+            else if (sensors[5].transform.position == BlockManager.instance.blocks[i].transform.position && BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed)
+            {
+                BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().zP.SetActive(true);
+            }
+            else if (sensors[0].transform.position == BlockManager.instance.blocks[i].transform.position && BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed)
+            {
+                BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().xN.SetActive(true);
+            }
+            else if (sensors[1].transform.position == BlockManager.instance.blocks[i].transform.position && BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed)
+            {
+                BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().xP.SetActive(true);
+            }
+        }
+    }
+
     void OnMouseEnter()
     {
         scrolledOver = true;
+        GetComponent<MeshRenderer>().material.color = Color.yellow;
         for(int i = 0; i < transform.childCount; i++)
         {
             if(transform.GetChild(i).GetComponent<MeshRenderer>() != null)
@@ -110,6 +187,7 @@ public class SnowBlockManager : MonoBehaviour {
     void OnMouseExit()
     {
         scrolledOver = false;
+        GetComponent<MeshRenderer>().material.color = Color.white;
         for (int i = 0; i < transform.childCount; i++)
         {
             if (transform.GetChild(i).GetComponent<MeshRenderer>() != null)
