@@ -51,7 +51,33 @@ public class SnowBlockManager : MonoBehaviour {
         }
     }
 
-    void destroyCube()
+	public void Highlight()
+	{
+		GetComponent<MeshRenderer>().material.color = Color.yellow;
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			if (transform.GetChild(i).GetComponent<MeshRenderer>() != null)
+			{
+				transform.GetChild(i).GetComponent<MeshRenderer>().material.color = Color.yellow;
+			}
+
+
+		}
+	}
+
+	public void UnHighlight()
+	{
+		GetComponent<MeshRenderer>().material.color = Color.white;
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			if (transform.GetChild(i).GetComponent<MeshRenderer>() != null)
+			{
+				transform.GetChild(i).GetComponent<MeshRenderer>().material.color = startcolor;
+			}
+		}
+	}
+
+    public void destroyCube()
     {
         baseCube.SetActive(false);
         
@@ -169,16 +195,7 @@ public class SnowBlockManager : MonoBehaviour {
     void OnMouseEnter()
     {
         scrolledOver = true;
-        GetComponent<MeshRenderer>().material.color = Color.yellow;
-        for(int i = 0; i < transform.childCount; i++)
-        {
-            if(transform.GetChild(i).GetComponent<MeshRenderer>() != null)
-            {
-                transform.GetChild(i).GetComponent<MeshRenderer>().material.color = Color.yellow;
-            }
-
-            
-        }
+		Highlight();
         
     }
 
@@ -187,14 +204,7 @@ public class SnowBlockManager : MonoBehaviour {
     void OnMouseExit()
     {
         scrolledOver = false;
-        GetComponent<MeshRenderer>().material.color = Color.white;
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            if (transform.GetChild(i).GetComponent<MeshRenderer>() != null)
-            {
-                transform.GetChild(i).GetComponent<MeshRenderer>().material.color = startcolor;
-            }
-        }
+		UnHighlight();
     }
 
     

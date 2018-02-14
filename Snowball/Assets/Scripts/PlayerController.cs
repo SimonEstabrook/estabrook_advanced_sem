@@ -20,15 +20,37 @@ public class PlayerController : MonoBehaviour {
 
     Rigidbody rb;
 
+	public GameObject currentBlock;
+	GameObject tempObject;
     private void Start()
     {
+		tempObject = null;
         rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
         CheckInput();
-        //Debug.Log(playerState);
+		//Debug.Log(playerState);
+		RaycastHit snow;
+		if (Physics.Raycast(transform.position, -Vector3.up, out snow, Mathf.Infinity))
+		{
+			
+			currentBlock = snow.transform.gameObject;
+			
+			currentBlock.GetComponent<SnowBlockManager>().Highlight();
+			if(tempObject != currentBlock && tempObject != null)
+			{
+				tempObject.GetComponent<SnowBlockManager>().UnHighlight();
+			}
+		}
+		tempObject = currentBlock;
+
+		if(Input.GetButtonDown(whichPlayer + "Action"))
+		{
+			Debug.Log("Destroy");
+			currentBlock.GetComponent<SnowBlockManager>().destroyCube();
+		}
     }
 
     void FixedUpdate()
