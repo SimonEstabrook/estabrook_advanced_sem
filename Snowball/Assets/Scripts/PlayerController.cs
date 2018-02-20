@@ -22,34 +22,45 @@ public class PlayerController : MonoBehaviour {
 
 	public GameObject currentBlock;
 	GameObject tempObject;
+    SnowBlockManager currentMan;
     private void Start()
     {
+        transform.position += (Vector3.up * BlockManager.instance.GiveMinHeight());
 		tempObject = null;
         rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        CheckInput();
-		//Debug.Log(playerState);
-		RaycastHit snow;
+        if(GameManager.instance.GameStart)
+        {
+            CheckInput();
+
+        }
+        //Debug.Log(playerState);
+        RaycastHit snow;
 		if (Physics.Raycast(transform.position, -Vector3.up, out snow, Mathf.Infinity))
 		{
-			
-			currentBlock = snow.transform.gameObject;
-			
-			currentBlock.GetComponent<SnowBlockManager>().Highlight();
-			if(tempObject != currentBlock && tempObject != null)
-			{
-				tempObject.GetComponent<SnowBlockManager>().UnHighlight();
-			}
+            if (snow.transform.gameObject.tag == "Block")
+            {
+
+
+                currentBlock = snow.transform.gameObject;
+
+                currentBlock.GetComponent<SnowBlockManager>().Highlight();
+                if (tempObject != currentBlock && tempObject != null)
+                {
+                    tempObject.GetComponent<SnowBlockManager>().UnHighlight();
+                }
+            }
 		}
 		tempObject = currentBlock;
-
+        currentMan = currentBlock.GetComponent<SnowBlockManager>();
 		if(Input.GetButtonDown(whichPlayer + "Action"))
 		{
 			Debug.Log("Destroy");
-			currentBlock.GetComponent<SnowBlockManager>().destroyCube();
+			currentMan.destroyCube();
+            currentMan.isDestroyed = true;
 		}
     }
 

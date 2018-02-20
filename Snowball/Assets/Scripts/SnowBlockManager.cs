@@ -23,6 +23,15 @@ public class SnowBlockManager : MonoBehaviour {
 
     private void Update()
     {
+        if(!GameManager.instance.seeNodes)
+        {
+            GetComponent<MeshRenderer>().enabled = false;
+        }
+        else
+        {
+            GetComponent<MeshRenderer>().enabled = true;
+        }
+
         if (Input.GetMouseButtonDown(0) && scrolledOver)
         {
             if(isDestroyed == false)
