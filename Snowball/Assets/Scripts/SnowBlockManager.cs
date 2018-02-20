@@ -6,7 +6,7 @@ public class SnowBlockManager : MonoBehaviour {
 
     public GameObject zP, zN, xP, xN;
 
-    [SerializeField] private List<GameObject> sensors;
+    public List<GameObject> sensors;
 
     public GameObject baseCube;
 
