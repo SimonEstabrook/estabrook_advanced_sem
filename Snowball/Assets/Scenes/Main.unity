@@ -88,7 +88,6 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 112000002, guid: f3db544e29c7c6145bd753e0cdcfbe6f,
     type: 2}
   m_UseShadowmask: 1
@@ -433,6 +432,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &728089258 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1858650187490706, guid: 4d3d58b6ce45c9246bc0ccf39f7ce4e4,
+    type: 2}
+  m_PrefabInternal: {fileID: 743758121}
+--- !u!114 &728089259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 728089258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b052a1586c22bff4b862a43126b8e26e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &743758121
 Prefab:
   m_ObjectHideFlags: 0
@@ -481,6 +496,11 @@ Prefab:
         type: 2}
       propertyPath: isGrounded
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 54179211772989876, guid: 4d3d58b6ce45c9246bc0ccf39f7ce4e4,
+        type: 2}
+      propertyPath: m_IsKinematic
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4d3d58b6ce45c9246bc0ccf39f7ce4e4, type: 2}
