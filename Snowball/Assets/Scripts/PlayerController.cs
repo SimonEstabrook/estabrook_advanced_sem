@@ -12,26 +12,32 @@ public class PlayerController : MonoBehaviour {
         P4 = 3
     }
 
-    private InputDevice pControl;
+    #region Private Variables
 
     //non viewable variables
-    Rigidbody rb;
+    private InputDevice pControl;
+
+    //snowblock variables
+    private GameObject currentBlock;
+    GameObject blockPlace;
     GameObject tempObject;
     SnowBlockManager currentMan;
 
-    GameObject blockPlace;
+    //movement
+    private float movex;
+    private float movey;
+    private float movez;
+    Rigidbody rb;
+    private bool isGrounded = true;
+    private int v = 0;
+    private int TempSpeed = 0;
+    #endregion
 
 
     [Header("Movement")] 
     [SerializeField] private int speed;
-    public float movex;
-    public float movez;
+    public bool isJumping = false;
     public player whichPlayer;
-
-
-    [Header("Debugs")]
-    public GameObject currentBlock;
-    [SerializeField] private bool isGrounded = true;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject block;
@@ -44,13 +50,13 @@ public class PlayerController : MonoBehaviour {
 
     private void Start()
     {
+        TempSpeed = speed;
         blockPlace = transform.Find("PlaceObject").gameObject;
         transform.position += (Vector3.up * BlockManager.instance.GiveMinHeight());
 		tempObject = null;
         rb = GetComponent<Rigidbody>();
     }
 
-    int v = 0;
 
     private void Update()
     {
@@ -78,17 +84,17 @@ public class PlayerController : MonoBehaviour {
 		}
 		tempObject = currentBlock;
         currentMan = currentBlock.GetComponent<SnowBlockManager>();
-		if(pControl.Action3)
+		if(pControl.Action3.WasPressed)
 		{
 			Debug.Log("Destroy");
 			GetComponent<PlayerAbilities>().DestroyBlock(currentBlock, currentMan);
         }
-        else if(pControl.Action2)
+        else if(pControl.Action2.WasPressed)
         {
             Debug.Log("Place");
             GetComponent<PlayerAbilities>().PlaceBlock(block, blockPlace);
         }
-        else if(pControl.Action1)
+        else if(pControl.Action1.WasPressed)
         {
             Debug.Log("Climb");
             GetComponent<PlayerAbilities>().Climb();
@@ -112,11 +118,30 @@ public class PlayerController : MonoBehaviour {
     {
 
 
-        rb.velocity = new Vector3(movex * speed, v, movez *  speed);
-
+        rb.velocity = new Vector3(movex * speed, -(movey * v), movez *  speed);
+        
         if(!isGrounded)
         {
-            v = -8;
+            if(!isJumping)
+            {
+                if (movey == 0)
+                {
+                    movey = 1;
+                }
+                v = 25;
+                speed = 5;
+
+            }
+            else
+            {
+                movey = 1;
+                v = 15;
+            }
+        }
+        else
+        {
+            speed = TempSpeed;
+            v = 0;
         }
 
 

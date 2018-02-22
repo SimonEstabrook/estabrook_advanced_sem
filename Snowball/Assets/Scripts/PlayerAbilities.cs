@@ -9,7 +9,8 @@ public class PlayerAbilities : MonoBehaviour {
 		RaycastHit block;
 		if (Physics.Raycast(transform.position, transform.forward, out block, 2, 1 << 8))
 		{
-			transform.position = new Vector3(block.transform.position.x, block.transform.position.y + 4, block.transform.position.z);
+			transform.position = new Vector3(block.transform.position.x, block.transform.position.y + 3.4f, block.transform.position.z);
+            GetComponent<PlayerController>().isJumping = true;
 		}
 	}
 

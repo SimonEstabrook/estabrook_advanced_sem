@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4797087495962248}
   - component: {fileID: 114301018158045396}
   - component: {fileID: 114291057767545414}
+  - component: {fileID: 114279586503241150}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -41,6 +42,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114279586503241150
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1654335016706826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7b5e8de77c5b4597ae7fbfb49a95e22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  logDebugInfo: 0
+  invertYAxis: 0
+  useFixedUpdate: 0
+  dontDestroyOnLoad: 0
+  suspendInBackground: 0
+  enableICade: 0
+  enableXInput: 0
+  xInputOverrideUpdateRate: 0
+  xInputUpdateRate: 0
+  xInputOverrideBufferSize: 0
+  xInputBufferSize: 0
+  enableNativeInput: 0
+  nativeInputEnableXInput: 1
+  nativeInputPreventSleep: 0
+  nativeInputOverrideUpdateRate: 0
+  nativeInputUpdateRate: 0
+  customProfiles: []
 --- !u!114 &114291057767545414
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -53,6 +82,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameStart: 0
+  seeNodes: 0
+  GodMode: 0
 --- !u!114 &114301018158045396
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -65,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blocks: []
-  length: 5
-  width: 5
-  height: 1
+  length: 10
+  width: 10
+  height: 2
   block: {fileID: 1654666327099394, guid: 7ca107f7a9507a74daea037fab683a50, type: 2}
