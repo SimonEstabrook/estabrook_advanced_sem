@@ -1,15 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using InControl;
 
 public class PlayerController : MonoBehaviour {
     public enum player
     {
-        P1 = 1,
-        P2 = 2,
-        P3 = 3,
-        P4 = 4
+        P1 = 0,
+        P2 = 1,
+        P3 = 2,
+        P4 = 3
     }
+
+    private InputDevice pControl;
+
     //non viewable variables
     Rigidbody rb;
     GameObject tempObject;
@@ -31,6 +35,12 @@ public class PlayerController : MonoBehaviour {
 
     [Header("Prefabs")]
     [SerializeField] private GameObject block;
+
+    private void Awake()
+    {
+        pControl = InputManager.Devices[(int)whichPlayer];
+
+    }
 
     private void Start()
     {
@@ -68,20 +78,28 @@ public class PlayerController : MonoBehaviour {
 		}
 		tempObject = currentBlock;
         currentMan = currentBlock.GetComponent<SnowBlockManager>();
-		if(Input.GetButtonDown(whichPlayer + "Action"))
+		if(pControl.Action3)
 		{
 			Debug.Log("Destroy");
 			GetComponent<PlayerAbilities>().DestroyBlock(currentBlock, currentMan);
         }
-        else if(Input.GetButtonDown(whichPlayer + "Place"))
+        else if(pControl.Action2)
         {
             Debug.Log("Place");
             GetComponent<PlayerAbilities>().PlaceBlock(block, blockPlace);
         }
-        else if(Input.GetButtonDown(whichPlayer + "Climb"))
+        else if(pControl.Action1)
         {
             Debug.Log("Climb");
             GetComponent<PlayerAbilities>().Climb();
+        }
+        if(pControl.Command.IsPressed)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
         }
 
         isGrounded = (Physics.Raycast(transform.position, -Vector3.up, 1.1f));
@@ -94,7 +112,7 @@ public class PlayerController : MonoBehaviour {
     {
 
 
-        rb.velocity = new Vector3(movex * -1 * speed, v, movez * -1 * speed);
+        rb.velocity = new Vector3(movex * speed, v, movez *  speed);
 
         if(!isGrounded)
         {
@@ -102,7 +120,7 @@ public class PlayerController : MonoBehaviour {
         }
 
 
-        Vector3 nextDir = new Vector3(-movex, 0, -movez);
+        Vector3 nextDir = new Vector3(movex, 0, movez);
         if (nextDir != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(nextDir);
@@ -114,8 +132,8 @@ public class PlayerController : MonoBehaviour {
 
     void CheckInput()
     {
-        movex = Input.GetAxis(whichPlayer + "LeftStickX");
-        movez = Input.GetAxis(whichPlayer + "LeftStickY");
+        movex = pControl.LeftStickX;
+        movez = pControl.LeftStickY;
 
     }
 
