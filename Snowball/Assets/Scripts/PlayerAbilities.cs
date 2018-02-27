@@ -4,13 +4,22 @@ using UnityEngine;
 
 public class PlayerAbilities : MonoBehaviour {
 
-	public void Climb()
+    [SerializeField] private GameObject crunchSound;
+
+    PlayerController PC;
+    private void Start()
+    {
+        PC = GetComponent<PlayerController>();
+    }
+
+    public void Climb()
 	{
 		RaycastHit block;
 		if (Physics.Raycast(transform.position, transform.forward, out block, 2, 1 << 8))
 		{
 			transform.position = new Vector3(block.transform.position.x, block.transform.position.y + 3.4f, block.transform.position.z);
-            GetComponent<PlayerController>().isJumping = true;
+            PC.isJumping = true;
+            crunchSound.GetComponent<AudioSource>().Play();
 		}
 	}
 
@@ -42,15 +51,17 @@ public class PlayerAbilities : MonoBehaviour {
 			blockInst.transform.position = new Vector3(blockInst.transform.position.x, 0, blockInst.transform.position.z);
 		}
 
+        PC.currentItem = PlayerController.items.nothing;
 
-		//check for dublicates
-		for (int i = 0; i < BlockManager.instance.blocks.Count; i++)
+        //check for duplicates
+        for (int i = 0; i < BlockManager.instance.blocks.Count; i++)
 		{
 
 			if (blockInst.transform.position == BlockManager.instance.blocks[i].transform.position && BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed == false)
 			{
 				Debug.Log("Destroyed");
 				Destroy(blockInst);
+                PC.currentItem = PlayerController.items.SnowPile;
 				break;
 			}
 
@@ -58,16 +69,25 @@ public class PlayerAbilities : MonoBehaviour {
 		if (blockInst != null)
 		{
 			BlockManager.instance.blocks.Add(blockInst);
-		}
-	}
+
+        }
+        crunchSound.GetComponent<AudioSource>().Play();
+        PC.GiveObject((int)PC.currentItem);
+
+    }
 
 
 
-	public void DestroyBlock(GameObject currentBlock, SnowBlockManager currentMan)
+    public void DestroyBlock(GameObject currentBlock, SnowBlockManager currentMan)
 	{
-		currentBlock.GetComponent<BoxCollider>().enabled = false;
-		currentMan.destroyCube();
-		currentMan.isDestroyed = true;
+        currentBlock.GetComponent<BoxCollider>().enabled = false;
+        PC.currentItem = PlayerController.items.SnowPile;
+        currentMan.destroyCube();
+        currentMan.isDestroyed = true;
+        crunchSound.GetComponent<AudioSource>().Play();
+        PC.GiveObject((int)PC.currentItem);
 
-	}
+    }
+
+
 }
