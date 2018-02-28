@@ -232,9 +232,9 @@ public class PlayerController : MonoBehaviour {
         if(n != 0)
         {
             currentObject = Instantiate(itemPrefabs[n], heldPoint.transform.position, Quaternion.identity);
-            currentObject.transform.localScale *= .35f;
+			currentObject.transform.Rotate(Vector3.right * -90);
+           // currentObject.transform.localScale *= .35f;
             currentObject.transform.parent = this.gameObject.transform;
-            currentObject.GetComponent<BoxCollider>().enabled = false;
             if(currentObject.GetComponent<SnowBlockManager>() != null)
             {
                 currentObject.GetComponent<SnowBlockManager>().enabled = false;

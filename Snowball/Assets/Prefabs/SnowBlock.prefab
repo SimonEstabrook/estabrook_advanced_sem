@@ -802,3 +802,9 @@ MonoBehaviour:
   baseCube: {fileID: 1608444661221172}
   isDestroyed: 0
   scrolledOver: 0
+  snowLevels:
+  - {fileID: 2100000, guid: 779721ce85b60e74aa0372542182f36b, type: 2}
+  - {fileID: 2100000, guid: d0f6ac1c4aa7c554fba08d1a6fee0b3e, type: 2}
+  - {fileID: 2100000, guid: c1448ba57e048864a9a02a94ed322a11, type: 2}
+  - {fileID: 2100000, guid: 9e4022ee1b3272f4bb92654b5a5b7982, type: 2}
+  - {fileID: 2100000, guid: 68bb582892da68c46ab55845d81fa071, type: 2}

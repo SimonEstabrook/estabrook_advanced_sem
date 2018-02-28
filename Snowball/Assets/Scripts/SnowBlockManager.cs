@@ -15,6 +15,8 @@ public class SnowBlockManager : MonoBehaviour {
     public bool isDestroyed = false;
     public bool scrolledOver = false;
 
+	[SerializeField] List<Material> snowLevels;
+
     private void Start()
     {
         startcolor = GetComponent<MeshRenderer>().material.color;
@@ -23,7 +25,30 @@ public class SnowBlockManager : MonoBehaviour {
 
     private void Update()
     {
-        if(!GameManager.instance.seeNodes)
+		if(transform.position.y > 3)
+		{
+			startcolor = snowLevels[4].color;
+		}
+		else
+		{
+			startcolor = snowLevels[(int)transform.position.y].color;
+		}
+
+		if(startcolor != GetComponent<MeshRenderer>().material.color)
+		{
+			GetComponent<MeshRenderer>().material.color = startcolor;
+			for (int i = 0; i < transform.childCount; i++)
+			{
+				if (transform.GetChild(i).GetComponent<MeshRenderer>() != null)
+				{
+					transform.GetChild(i).GetComponent<MeshRenderer>().material.color = startcolor;
+				}
+			}
+
+		}
+
+
+		if (!GameManager.instance.seeNodes)
         {
             GetComponent<MeshRenderer>().enabled = false;
         }

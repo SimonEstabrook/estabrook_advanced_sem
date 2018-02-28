@@ -143,7 +143,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1858650187490706}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 1}
+  m_LocalPosition: {x: 28.06, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4290574457890868}
@@ -464,7 +464,7 @@ MonoBehaviour:
   currentItem: 0
   itemPrefabs:
   - {fileID: 0}
-  - {fileID: 1654666327099394, guid: 7ca107f7a9507a74daea037fab683a50, type: 2}
+  - {fileID: 1683256429454068, guid: bf08fd1fa4fcdf5418def049fcb7d600, type: 2}
   - {fileID: 1726020036167216, guid: c4bf842f5f5c8b247b85f1b764734a5b, type: 2}
   currentObject: {fileID: 0}
   heldPoint: {fileID: 1107592170779656}
