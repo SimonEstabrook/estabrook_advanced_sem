@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Sensor
   - Block
+  - Pickup
   layers:
   - Default
   - TransparentFX
@@ -16,8 +17,8 @@ TagManager:
   - 
   - 
   - SnowBlock
-  - 
-  - 
+  - Player
+  - Pickups
   - 
   - 
   - 

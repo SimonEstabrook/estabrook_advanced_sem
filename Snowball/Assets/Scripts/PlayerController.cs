@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour {
     private const float SNOWBALL_TIMER = 2f;
     private const float WALL_TIMER = 2.5f;
     private const float CLIMB_TIMER = .5f;
+
+    private const int MAX_AMMO = 3;
     #endregion
 
     #region Private Variables
@@ -49,6 +51,9 @@ public class PlayerController : MonoBehaviour {
     private int v = 0;
     private int TempSpeed = 0;
 
+    //items
+    [HideInInspector] public GameObject pickableItem;
+
     //actions
     float timer = 0.0f;
     private bool wait = false;
@@ -67,10 +72,12 @@ public class PlayerController : MonoBehaviour {
     public player whichPlayer;
 
     [Header("Inventory")]
+    public int ammo;
+    public List<GameObject> snowballPoints;
     public items currentItem = items.nothing;
     public List<GameObject> itemPrefabs;
     [SerializeField] GameObject currentObject;
-    [SerializeField] GameObject heldPoint;
+    public GameObject heldPoint;
 
     [Header("UI")]
     [SerializeField] private Slider timeSlider;
@@ -133,16 +140,18 @@ public class PlayerController : MonoBehaviour {
                 }
             }
 		}
-		tempObject = currentBlock;
+
+        #region ACTIONS
+        tempObject = currentBlock;
         currentMan = currentBlock.GetComponent<SnowBlockManager>();
-		if(((pControl.Action3.WasPressed && !wait) || isPickingUp) && currentItem == items.nothing)
-		{
-            if(timer < PICKUP_TIMER)
+        if (((pControl.Action3.WasPressed && !wait) || isPickingUp) && currentItem == items.nothing)
+        {
+            if (timer < PICKUP_TIMER)
             {
                 isPickingUp = true;
                 speed = 0;
                 rb.velocity = Vector3.zero;
-                timer+= Time.deltaTime;
+                timer += Time.deltaTime;
                 wait = true;
             }
             else
@@ -156,7 +165,28 @@ public class PlayerController : MonoBehaviour {
 
             }
         }
-        else if(((pControl.Action2.WasPressed && !wait) || isPlacing) && currentItem == items.SnowPile)
+        else if (((pControl.Action3.WasPressed && !wait) || isCreating) && currentItem == items.SnowPile)
+        {
+            if (timer < SNOWBALL_TIMER)
+            {
+                isCreating = true;
+                rb.velocity = Vector3.zero;
+                speed = 0;
+                timer += Time.deltaTime;
+                wait = true;
+            }
+            else
+            {
+                isCreating = false;
+                speed = TempSpeed;
+                Debug.Log("Create");
+                PA.Craft();
+                wait = false;
+                timer = 0;
+
+            }
+        }
+        else if (((pControl.Action2.WasPressed && !wait) || isPlacing) && currentItem == items.SnowPile)
         {
             if (timer < WALL_TIMER)
             {
@@ -183,31 +213,37 @@ public class PlayerController : MonoBehaviour {
             PA.Climb();
             
         }
-
-        /*
-         * idk if I want a timer for jumping
-        else if((pControl.Action1.WasPressed && !wait) || isClimbing)
+        else if (pControl.Action4.WasPressed && !wait)
         {
-            if (timer < CLIMB_TIMER)
-            {
-                isClimbing = true;
-                timer += Time.deltaTime;
-                wait = true;
-            }
-            else
-            {
-                isClimbing = false;
-                Debug.Log("Climb");
-                PA.Climb();
-                wait = false;
-                timer = 0;
+            PA.Drop();
+        }
+        else if(pControl.RightBumper.WasPressed && currentItem == items.Snowball && !wait)
+        {
+            Debug.Log("Throw");
+            PA.Throw();
+        }
+		#endregion
 
-            }
+		#region DEBUG_COMMANDS
+		if(pControl.DPadUp.WasPressed)
+		{
+			currentItem = items.Snowball;
+			GiveObject((int)currentItem);
+		}
+		if(pControl.DPadDown.WasPressed)
+		{
+			currentItem = items.SnowPile;
+			GiveObject((int)currentItem);
+		}
+		if(pControl.DPadLeft.WasPressed || pControl.DPadRight.WasPressed)
+		{
+			currentItem = items.nothing;
+			GiveObject(0);
+			ammo--;
+		}
+		#endregion
 
-        }*/
-
-
-        if(pControl.Command.IsPressed)
+		if (pControl.Command.IsPressed)
         {
             Application.Quit();
             Time.timeScale = 0;
@@ -228,17 +264,36 @@ public class PlayerController : MonoBehaviour {
         if(currentObject != null)
         {
             Destroy(currentObject.gameObject);
-        }
-        if(n != 0)
+        }    
+        if(n == 0)
         {
-            currentObject = Instantiate(itemPrefabs[n], heldPoint.transform.position, Quaternion.identity);
-			currentObject.transform.Rotate(Vector3.right * -90);
-           // currentObject.transform.localScale *= .35f;
-            currentObject.transform.parent = this.gameObject.transform;
-            if(currentObject.GetComponent<SnowBlockManager>() != null)
+            Destroy(currentObject.gameObject);
+        }
+        else
+        {
+            switch(n)
             {
-                currentObject.GetComponent<SnowBlockManager>().enabled = false;
+                case 1:
+                    currentObject = Instantiate(itemPrefabs[n], heldPoint.transform.position, itemPrefabs[n].transform.rotation);
+                    break;
+                case 2:
+                    currentObject = Instantiate(itemPrefabs[n], snowballPoints[ammo].transform.position, Quaternion.identity);
+                    currentObject.GetComponent<Rigidbody>().isKinematic = true;
+                    currentObject.GetComponent<TrailRenderer>().enabled = false;
+                    ammo++;
+                    break;
+                default:
+                    Debug.LogError("Incorrect item id");
+                    break;
+
             }
+            currentObject.transform.parent = this.gameObject.transform;
+            if (currentObject.GetComponent<Rigidbody>() == true)
+            {
+                currentObject.GetComponent<Rigidbody>().isKinematic = true;
+
+            }
+
         }
     }
 
@@ -254,6 +309,11 @@ public class PlayerController : MonoBehaviour {
         {
             timeSlider.gameObject.SetActive(true);
             timeSlider.maxValue = WALL_TIMER;
+        }
+        else if(isCreating)
+        {
+            timeSlider.gameObject.SetActive(true);
+            timeSlider.maxValue = SNOWBALL_TIMER;
         }
         else
         {
@@ -308,9 +368,24 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Pickup")
+        {
+            pickableItem = other.gameObject;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Pickup")
+        {
+            pickableItem = null;
+        }
+    }
 
-   
+
+
+
 
 
 }

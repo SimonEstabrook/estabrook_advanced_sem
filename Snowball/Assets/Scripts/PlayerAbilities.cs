@@ -23,9 +23,57 @@ public class PlayerAbilities : MonoBehaviour {
 		}
 	}
 
+    public void Drop()
+    {
+        if(PC.currentItem != PlayerController.items.nothing)
+        {
+            GameObject droppedItem = Instantiate(PC.itemPrefabs[(int)PC.currentItem], transform.position, PC.itemPrefabs[(int)PC.currentItem].transform.rotation);
+            droppedItem.GetComponent<Rigidbody>().AddForce(Vector3.up * 1000);
+            PC.currentItem = PlayerController.items.nothing;
+            PC.GiveObject(0);
+            crunchSound.GetComponent<AudioSource>().Play();
+        }
+        else
+        {
+            if(PC.pickableItem != null)
+            {
+                if(PC.pickableItem.name.Contains("SnowPile"))
+                {
+                    PC.currentItem = PlayerController.items.SnowPile;
+                }else if(PC.pickableItem.name.Contains("Snowball"))
+                {
+                    PC.currentItem = PlayerController.items.Snowball;
+                }
+                PC.GiveObject((int)PC.currentItem);
+                Destroy(PC.pickableItem.gameObject);
+                crunchSound.GetComponent<AudioSource>().Play();
+
+            }
+        }
+    }
+
+    public void Craft()
+    {
+        PC.currentItem = PlayerController.items.Snowball;
+        PC.GiveObject((int)PC.currentItem);        
+    }
+
+    public void Throw()
+    {
+
+        GameObject snowballInstance = Instantiate(PC.itemPrefabs[(int)PC.currentItem], PC.heldPoint.transform.position, transform.rotation);
+        Rigidbody instRB = snowballInstance.GetComponent<Rigidbody>();
+        instRB.useGravity = false;
+        instRB.AddForce(transform.forward * 1500);
+        //instRB.AddForce(Vector3.up * 150);
+        PC.currentItem = PlayerController.items.nothing;
+        PC.GiveObject((int)PC.currentItem);
+		PC.ammo--;
+
+    }
 
 
-	public void PlaceBlock(GameObject block, GameObject blockPlace)
+    public void PlaceBlock(GameObject block, GameObject blockPlace)
 	{
 		
 		GameObject blockInst;
@@ -75,7 +123,6 @@ public class PlayerAbilities : MonoBehaviour {
         PC.GiveObject((int)PC.currentItem);
 
     }
-
 
 
     public void DestroyBlock(GameObject currentBlock, SnowBlockManager currentMan)
