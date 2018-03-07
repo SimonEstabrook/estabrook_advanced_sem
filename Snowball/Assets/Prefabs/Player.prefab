@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 54179211772989876}
   - component: {fileID: 114290475899875552}
   - component: {fileID: 82466378456689130}
+  - component: {fileID: 65745594447728694}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -244,8 +245,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1858650187490706}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 28.06, y: 0, z: 1}
+  m_LocalRotation: {x: -0.00000051967805, y: 0.07881162, z: 0.000000021304006, w: 0.99688953}
+  m_LocalPosition: {x: 25.627209, y: 4.021024, z: 4.416883}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4392090487329022}
@@ -391,6 +392,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &65745594447728694
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1858650187490706}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 0.39440095, z: 0.7785257}
+  m_Center: {x: 0.00000000244873, y: 0.80969685, z: 0.13926284}
 --- !u!82 &82263384882947774
 AudioSource:
   m_ObjectHideFlags: 1
@@ -576,8 +589,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pickableItem: {fileID: 0}
   speed: 9
-  isJumping: 0
+  isJumping: 1
   whichPlayer: 0
+  team: 0
   ammo: 0
   snowballPoints:
   - {fileID: 1697646167558894}

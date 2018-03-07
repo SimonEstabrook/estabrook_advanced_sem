@@ -27,6 +27,10 @@ public class PlayerAbilities : MonoBehaviour {
     {
         if(PC.currentItem != PlayerController.items.nothing)
         {
+			if(PC.currentItem == PlayerController.items.Snowball)
+			{
+				PC.ammo--;
+			}
             GameObject droppedItem = Instantiate(PC.itemPrefabs[(int)PC.currentItem], transform.position, PC.itemPrefabs[(int)PC.currentItem].transform.rotation);
             droppedItem.GetComponent<Rigidbody>().AddForce(Vector3.up * 1000);
             PC.currentItem = PlayerController.items.nothing;
@@ -62,7 +66,9 @@ public class PlayerAbilities : MonoBehaviour {
     {
 
         GameObject snowballInstance = Instantiate(PC.itemPrefabs[(int)PC.currentItem], PC.heldPoint.transform.position, transform.rotation);
-        Rigidbody instRB = snowballInstance.GetComponent<Rigidbody>();
+		snowballInstance.GetComponent<SnowballManager>().enabled = true;
+		snowballInstance.GetComponent<SnowballManager>().team = PC.team;
+		Rigidbody instRB = snowballInstance.GetComponent<Rigidbody>();
         instRB.useGravity = false;
         instRB.AddForce(transform.forward * 1500);
         //instRB.AddForce(Vector3.up * 150);
@@ -105,12 +111,20 @@ public class PlayerAbilities : MonoBehaviour {
         for (int i = 0; i < BlockManager.instance.blocks.Count; i++)
 		{
 
-			if (blockInst.transform.position == BlockManager.instance.blocks[i].transform.position && BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed == false)
+			if (blockInst.transform.position == BlockManager.instance.blocks[i].transform.position)
 			{
-				Debug.Log("Destroyed");
-				Destroy(blockInst);
-                PC.currentItem = PlayerController.items.SnowPile;
-				break;
+				if(BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed == false)
+				{
+					Debug.Log("Destroyed");
+					Destroy(blockInst);
+					PC.currentItem = PlayerController.items.SnowPile;
+					break;
+
+				}
+				else
+				{
+					BlockManager.instance.blocks[i].gameObject.SetActive(false) ;
+				}
 			}
 
 		}

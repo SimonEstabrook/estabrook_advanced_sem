@@ -13,6 +13,16 @@ public class PlayerController : MonoBehaviour {
         P4 = 3
     }
 
+	public enum Team
+	{
+		None = 0,
+		Team1 = 1,
+		Team2 = 2,
+		Team3 = 3,
+		Team4 = 4
+	}
+
+
     public enum items
     {
         nothing = 0,
@@ -66,10 +76,12 @@ public class PlayerController : MonoBehaviour {
     #endregion
 
     #region Public Variables
+
     [Header("Movement")] 
     [SerializeField] private int speed;
     public bool isJumping = false;
     public player whichPlayer;
+	public Team team;
 
     [Header("Inventory")]
     public int ammo;
@@ -217,7 +229,7 @@ public class PlayerController : MonoBehaviour {
         {
             PA.Drop();
         }
-        else if(pControl.RightBumper.WasPressed && currentItem == items.Snowball && !wait)
+        else if((pControl.RightBumper.WasPressed || pControl.LeftBumper.WasPressed) && currentItem == items.Snowball && !wait)
         {
             Debug.Log("Throw");
             PA.Throw();
@@ -323,10 +335,17 @@ public class PlayerController : MonoBehaviour {
 
     void FixedUpdate()
     {
+		if(!wait)
+		{
+			rb.velocity = new Vector3(movex * speed, -(movey * v), movez * speed);
 
-        rb.velocity = new Vector3(movex * speed, -(movey * v), movez *  speed);
-        
-        if(!isGrounded)
+		}
+		else
+		{
+			rb.velocity = Vector3.zero;
+		}
+
+		if (!isGrounded)
         {
             if(!isJumping)
             {
@@ -370,12 +389,25 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Pickup")
-        {
-            pickableItem = other.gameObject;
-        }
+		if (other.tag == "Pickup")
+		{
+			pickableItem = other.gameObject;
+		}
+		if(other.tag == "Block")
+		{
+
+			transform.position = other.transform.position + Vector3.up*1;
+		}
     }
-    private void OnTriggerExit(Collider other)
+	private void OnTriggerStay(Collider other)
+	{
+		if(other.tag == "Block")
+		{
+			transform.position = other.transform.position + Vector3.up * 1;
+
+		}
+	}
+	private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Pickup")
         {
