@@ -27,12 +27,14 @@ public class PlayerAbilities : MonoBehaviour {
     {
         if(PC.currentItem != PlayerController.items.nothing)
         {
-			if(PC.currentItem == PlayerController.items.Snowball)
+            GameObject droppedItem = Instantiate(PC.itemPrefabs[(int)PC.currentItem], transform.position, PC.itemPrefabs[(int)PC.currentItem].transform.rotation);
+			if (PC.currentItem == PlayerController.items.Snowball)
 			{
 				PC.ammo--;
+				droppedItem.GetComponent<SnowballManager>().enabled = false;
 			}
-            GameObject droppedItem = Instantiate(PC.itemPrefabs[(int)PC.currentItem], transform.position, PC.itemPrefabs[(int)PC.currentItem].transform.rotation);
-            droppedItem.GetComponent<Rigidbody>().AddForce(Vector3.up * 1000);
+
+			droppedItem.GetComponent<Rigidbody>().AddForce(Vector3.up * 1000);
             PC.currentItem = PlayerController.items.nothing;
             PC.GiveObject(0);
             crunchSound.GetComponent<AudioSource>().Play();
@@ -66,7 +68,7 @@ public class PlayerAbilities : MonoBehaviour {
     {
 
         GameObject snowballInstance = Instantiate(PC.itemPrefabs[(int)PC.currentItem], PC.heldPoint.transform.position, transform.rotation);
-		snowballInstance.GetComponent<SnowballManager>().enabled = true;
+		snowballInstance.GetComponent<SnowballManager>().dropped = false;
 		snowballInstance.GetComponent<SnowballManager>().team = PC.team;
 		Rigidbody instRB = snowballInstance.GetComponent<Rigidbody>();
         instRB.useGravity = false;
