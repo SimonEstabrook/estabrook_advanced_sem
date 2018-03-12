@@ -56,33 +56,7 @@ public class SnowBlockManager : MonoBehaviour {
         {
             GetComponent<MeshRenderer>().enabled = true;
         }
-        /*
-        if (Input.GetMouseButtonDown(0) && scrolledOver)
-        {
-            if(isDestroyed == false)
-            {
-                Debug.Log("Destroy" + this.name);
-                isDestroyed = true;
-                GetComponent<BoxCollider>().enabled = false;
-                GetComponent<SphereCollider>().enabled = true;
-                destroyCube();
-
-            }
-            
-        }
-        else if(Input.GetMouseButtonDown(1) && scrolledOver)
-        {
-            if (isDestroyed == true) ;
-            {
-                Debug.Log("Rebuild" + this.name);
-                isDestroyed = false;
-                GetComponent<BoxCollider>().enabled = true;
-                GetComponent<SphereCollider>().enabled = false;
-
-                BuildSnow();
-
-            }
-        }*/
+      
     }
 
 	public void Highlight()
@@ -117,8 +91,8 @@ public class SnowBlockManager : MonoBehaviour {
         
         for(int i = 0; i < BlockManager.instance.blocks.Count; i++)
         {
-            if (sensors[2].transform.position != BlockManager.instance.blocks[i].transform.position || (BlockManager.instance.blocks[i].transform.position == sensors[2].transform.position && BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed))
-            {
+            //if (sensors[2].transform.position != BlockManager.instance.blocks[i].transform.position || (BlockManager.instance.blocks[i].transform.position == sensors[2].transform.position && BlockManager.instance.blocks[i].GetComponent<SnowBlockManager>().isDestroyed))
+            //{
 
 
                 if (BlockManager.instance.blocks[i].transform.position == sensors[2].transform.position)
@@ -183,7 +157,7 @@ public class SnowBlockManager : MonoBehaviour {
                     {
                         zN.SetActive(true);
                     }
-                }
+                //}
             }
         }
 

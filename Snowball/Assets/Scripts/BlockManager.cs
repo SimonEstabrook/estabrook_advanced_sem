@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class BlockManager : MonoBehaviour {
 
     [HideInInspector] public List<GameObject> blocks;
@@ -42,12 +43,6 @@ public class BlockManager : MonoBehaviour {
         GameManager.instance.GameStart = true;
         camera.transform.position = new Vector3(length-1, camera.transform.position.y, camera.transform.position.z);
     }
-
-    // Update is called once per frame
-    void Update () {
-
-
-	}
 
     public int GiveMinHeight()
     {

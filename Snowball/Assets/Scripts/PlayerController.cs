@@ -44,7 +44,10 @@ public class PlayerController : MonoBehaviour {
     //non viewable variables
     private InputDevice pControl;
     private PlayerAbilities PA;
-    Camera cam;
+	Camera cam;
+	[HideInInspector] public float health;
+	private float MaxHealth;
+	private int snowBallDamage;
 
     //snowblock variables
     private GameObject currentBlock;
@@ -93,6 +96,7 @@ public class PlayerController : MonoBehaviour {
 
     [Header("UI")]
     [SerializeField] private Slider timeSlider;
+	[SerializeField] private Slider healthSlider;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject block;
@@ -113,11 +117,25 @@ public class PlayerController : MonoBehaviour {
         transform.position += (Vector3.up * BlockManager.instance.GiveMinHeight());
 		tempObject = null;
         rb = GetComponent<Rigidbody>();
-    }
+
+		if(GameManager.instance.mode == GameManager.HealthMode.livesMode)
+		{
+			health = 3;
+			snowBallDamage = 1;
+		}
+		else
+		{
+			health = 100;
+			snowBallDamage = 15;
+			
+		}
+		MaxHealth = healthSlider.maxValue = health;
+	}
 
 
-    private void Update()
+	private void Update()
     {
+		healthSlider.value = health;
         isWalking = (GetComponent<Rigidbody>().velocity.x != 0 || GetComponent<Rigidbody>().velocity.z != 0);
 
         if (isWalking && !GetComponent<AudioSource>().isPlaying)
@@ -237,21 +255,25 @@ public class PlayerController : MonoBehaviour {
 		#endregion
 
 		#region DEBUG_COMMANDS
-		if(pControl.DPadUp.WasPressed)
+		if (GameManager.instance.PlayerCheats)
 		{
-			currentItem = items.Snowball;
-			GiveObject((int)currentItem);
-		}
-		if(pControl.DPadDown.WasPressed)
-		{
-			currentItem = items.SnowPile;
-			GiveObject((int)currentItem);
-		}
-		if(pControl.DPadLeft.WasPressed || pControl.DPadRight.WasPressed)
-		{
-			currentItem = items.nothing;
-			GiveObject(0);
-			ammo--;
+
+
+			if (pControl.DPadUp.WasPressed)
+			{
+				currentItem = items.Snowball;
+				GiveObject((int)currentItem);
+			}
+			if (pControl.DPadDown.WasPressed)
+			{
+				currentItem = items.SnowPile;
+				GiveObject((int)currentItem);
+			}
+			if (pControl.DPadLeft.WasPressed || pControl.DPadRight.WasPressed)
+			{
+				currentItem = items.nothing;
+				GiveObject(0);
+			}
 		}
 		#endregion
 
@@ -279,6 +301,10 @@ public class PlayerController : MonoBehaviour {
         }    
         if(n == 0)
         {
+			if(currentItem == items.Snowball)
+			{
+				ammo--;
+			}
             Destroy(currentObject.gameObject);
         }
         else
@@ -379,13 +405,17 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-
     void CheckInput()
     {
         movex = pControl.LeftStickX;
         movez = pControl.LeftStickY;
 
     }
+
+	public void TakeDamage()
+	{
+		health -= snowBallDamage;
+	}
 
     private void OnTriggerEnter(Collider other)
     {
@@ -399,6 +429,7 @@ public class PlayerController : MonoBehaviour {
 			transform.position = other.transform.position + Vector3.up*1;
 		}
     }
+
 	private void OnTriggerStay(Collider other)
 	{
 		if(other.tag == "Block")
@@ -407,6 +438,7 @@ public class PlayerController : MonoBehaviour {
 
 		}
 	}
+
 	private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Pickup")
