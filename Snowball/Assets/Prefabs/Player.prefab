@@ -151,6 +151,7 @@ GameObject:
   - component: {fileID: 114290475899875552}
   - component: {fileID: 82466378456689130}
   - component: {fileID: 65745594447728694}
+  - component: {fileID: 114439506550813720}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -402,8 +403,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.75, y: 0.39440095, z: 0.764611}
-  m_Center: {x: 0, y: 0.80969685, z: 0.1323055}
+  m_Size: {x: 0.75, y: 0.39440095, z: 0.7785257}
+  m_Center: {x: 0, y: 0.80969685, z: 0.13926286}
 --- !u!82 &82263384882947774
 AudioSource:
   m_ObjectHideFlags: 1
@@ -576,6 +577,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   crunchSound: {fileID: 1023571808956438}
+--- !u!114 &114439506550813720
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1858650187490706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6337f8c81d8fe184887243a7f86dbc86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerName: {fileID: 0}
 --- !u!114 &114732330143319318
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -587,11 +600,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 612203083da232f49876074754302d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 0
   pickableItem: {fileID: 0}
   speed: 9
   isJumping: 1
   whichPlayer: 0
-  team: 0
+  team: 1
   ammo: 0
   snowballPoints:
   - {fileID: 1697646167558894}
@@ -605,6 +619,7 @@ MonoBehaviour:
   currentObject: {fileID: 0}
   heldPoint: {fileID: 1107592170779656}
   timeSlider: {fileID: 0}
+  healthSlider: {fileID: 0}
   block: {fileID: 1654666327099394, guid: 7ca107f7a9507a74daea037fab683a50, type: 2}
 --- !u!136 &136769431072842122
 CapsuleCollider:
