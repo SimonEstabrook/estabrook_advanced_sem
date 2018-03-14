@@ -49,9 +49,6 @@ public class CharSelectManager : MonoBehaviour {
 	#endregion
 	
 
-
-	PlayerVariables PV = PlayerVariables.instance;
-
 	private void Awake()
 	{
 		pControl = InputManager.Devices[(int)Player];
@@ -218,22 +215,23 @@ public class CharSelectManager : MonoBehaviour {
 		{
 			isReady = false;
 			HighLight(tiles[selectedItem]);
-
+			PlayerVariables.instance.Unready();
 		}
 		else
 		{
 			isReady = true;
 			HighLight(tiles[selectedItem]);
 			UploadInformation();
+			PlayerVariables.instance.ReadyUp();
+
 		}
 	}
 
 	void UploadInformation()
 	{
-		PV.PlayerList[pNum].SetControl(pNum);
-		PV.PlayerList[pNum].SetName(name);
-		PV.PlayerList[pNum].SetPColor(pColor);
-		PV.PlayerList[pNum].SetTeam((int)team);
+		PlayerVariables.Player pInstance = new PlayerVariables.Player(name, team, pNum, pColor);
+
+		PlayerVariables.instance.PlayerList[pNum] = pInstance;
 
 	}
 

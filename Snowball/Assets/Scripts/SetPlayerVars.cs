@@ -16,7 +16,7 @@ public class SetPlayerVars : MonoBehaviour {
 		PC = GetComponent<PlayerController>();
 		MR = GetComponent<MeshRenderer>();
 
-		PC.team = (PlayerController.Team)PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetTeam();
+		PC.team = (PlayerController.Team)PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetTeam()+1;
 		PlayerName.text = PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetName();
 		MR.material.color = PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetPColor();
 	}

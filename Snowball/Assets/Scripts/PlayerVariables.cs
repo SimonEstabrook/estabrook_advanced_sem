@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using InControl;
+using UnityEngine.SceneManagement;
 
 public class PlayerVariables : MonoBehaviour {
 
@@ -17,7 +18,10 @@ public class PlayerVariables : MonoBehaviour {
 
 		public Player()
 		{
-
+			name = "";
+			team = 0;
+			controller = 0;
+			pColor = Color.white;
 		}
 
 		public Player(string n, int t, int c, Color pC)
@@ -71,6 +75,8 @@ public class PlayerVariables : MonoBehaviour {
 
 	public Player[] PlayerList;
 
+	public int isReady = 0;
+
 	private void Awake()
 	{
 		if (instance == null)
@@ -90,6 +96,23 @@ public class PlayerVariables : MonoBehaviour {
 		{
 			PlayerList[i] = new Player();
 		}
+	}
+
+	private void Update()
+	{
+		if (isReady >= 2 && SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
+		{
+			SceneManager.LoadScene(2);
+		}
+	}
+
+	public void ReadyUp()
+	{
+		isReady++;
+	}
+	public void Unready()
+	{
+		isReady--;
 	}
 	
 	
