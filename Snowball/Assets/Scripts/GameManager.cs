@@ -24,14 +24,16 @@ public class GameManager : MonoBehaviour {
 	public static GameManager instance = null;
 
 	public GameMode gMode;
+	public bool ModeSet = false;
     public bool GameStart = false;
 	public bool GameOver = false;
 	public bool isPaused = false;
 
 	[Header("Player Info")]
 	public List<GameObject> Players;
-	public List<GameObject> Team1, Team2, Team3, Team4;
-	public int T1, T2, T3, T4;
+	public List<GameObject> Team1, Team2;
+	public int T1, T2;
+	
 
 	[Header("UI")]
 	public Text DebugText;
@@ -39,6 +41,7 @@ public class GameManager : MonoBehaviour {
 
 	[Header("Prefabs")]
 	public GameObject PauseMenu;
+	public GameObject ResultsScreen;
 
     [Header("Debugs")]
     public bool seeNodes = false;
@@ -62,53 +65,30 @@ public class GameManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		Players.AddRange(GameObject.FindGameObjectsWithTag("Player"));
-		for(int i = 0; i < Players.Count; i++)
-		{
-			switch(Players[i].GetComponent<PlayerController>().team)
-			{
-				case PlayerController.Team.Team1:
-					Team1.Add(Players[i]);
-					break;
-				case PlayerController.Team.Team2:
-					Team2.Add(Players[i]);
-					break;
-				case PlayerController.Team.Team3:
-					Team3.Add(Players[i]);
-					break;
-				case PlayerController.Team.Team4:
-					Team4.Add(Players[i]);
-					break;
-				default:
-					Debug.LogError("Invalid Team");
-					break;
-			}
-		}
 
 		T1 = Team1.Count;
 		T2 = Team2.Count;
-		T3 = Team3.Count;
-		T4 = Team4.Count;
 
-		if (T1 > 0 && T2 > 0)
-		{
-			gMode = GameMode.PvP;
-		}
-		else
-		{
-			gMode = GameMode.Co_op;
-		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		if(!ModeSet)
+		{
+			if(T1+T2 == GameObject.FindGameObjectsWithTag("Player").Length)
+			{
+				SetMode();
+				ModeSet = true;
+			}
+		}
 		for(int i = 0; i < InputManager.Devices.Count;i++)
 		{
-			if(InputManager.Devices[i].Command.WasPressed)
+			if(InputManager.Devices[i].Command.WasPressed && !GameOver)
 			{
 				isPaused = !isPaused;
 			}
-			if(isPaused && InputManager.Devices[i].RightTrigger.IsPressed && InputManager.Devices[i].LeftTrigger.IsPressed && InputManager.Devices[i].Action1.IsPressed)
+			if((isPaused || GameOver) && InputManager.Devices[i].RightTrigger.IsPressed && InputManager.Devices[i].LeftTrigger.IsPressed && InputManager.Devices[i].Action1.IsPressed)
 			{
 				SceneManager.LoadScene(0);
 			}
@@ -126,6 +106,14 @@ public class GameManager : MonoBehaviour {
 			PauseMenu.SetActive(false);
 		}
 
+		if(GameOver)
+		{
+			Time.timeScale = 0;
+			ResultsScreen.SetActive(true);
+
+			ResultsScreen.transform.GetChild(2).gameObject.GetComponent<Text>().text = (T1 > 0 ? "Team 1" : "Team2") + " won the game!";
+		}
+
         checkDebug();
 		if (DebugText.enabled == true)
 		{
@@ -141,7 +129,7 @@ public class GameManager : MonoBehaviour {
 			}
 
 		}
-		if(gMode == GameMode.PvP && (Team1.Count <= 0 || Team2.Count <= 0))
+		if(gMode == GameMode.PvP && (T1 <= 0 || T2 <= 0))
 		{
 			GameOver = true;
 		}
@@ -176,8 +164,20 @@ public class GameManager : MonoBehaviour {
 
 	}
 
+	void SetMode()
+	{
+		if (T1 > 0 && T2 > 0)
+		{
+			gMode = GameMode.PvP;
+		}
+		else
+		{
+			gMode = GameMode.Co_op;
+		}
 
-    bool toggle(bool b)
+	}
+
+	bool toggle(bool b)
     {
         if(b == true)
         {
@@ -199,6 +199,21 @@ public class GameManager : MonoBehaviour {
 		else
 		{
 			T2--;
+		}
+	}
+
+	public void AddPlayer(GameObject g, PlayerController.Team t)
+	{
+		Players.Add(g);
+		if(t == PlayerController.Team.Team1)
+		{
+			T1++;
+			Team1.Add(g);
+		}
+		else
+		{
+			T2++;
+			Team2.Add(g);
 		}
 	}
 }

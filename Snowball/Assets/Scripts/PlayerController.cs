@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour {
     private const float PICKUP_TIMER = 1.5f;
     private const float SNOWBALL_TIMER = 2f;
     private const float WALL_TIMER = 2.5f;
-    private const float CLIMB_TIMER = .5f;
 
     private const int MAX_AMMO = 3;
 	private const float FREEZE_MAX_TIME = 5f;
@@ -161,6 +160,7 @@ public class PlayerController : MonoBehaviour {
 		if(health <= 0)
 		{
 			GameManager.instance.PlayerGone(team);
+			this.gameObject.SetActive(false);
 		}
 
 		ColdSlider.value = ColdTotal;

@@ -645,6 +645,7 @@
     <Compile Include="Assets\Scripts\PlayerVariables.cs" />
     <Compile Include="Assets\Scripts\RotateCamera.cs" />
     <Compile Include="Assets\Scripts\SetPlayerVars.cs" />
+    <Compile Include="Assets\Scripts\SettingMenu.cs" />
     <Compile Include="Assets\Scripts\SnowballManager.cs" />
     <Compile Include="Assets\Scripts\SnowBlockManager.cs" />
   </ItemGroup>

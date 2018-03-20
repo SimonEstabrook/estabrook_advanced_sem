@@ -89,6 +89,8 @@ public class PlayerVariables : MonoBehaviour {
 	public int isReady = 0;
 	public int ActivePlayers;
 
+	public GameObject startPanel;
+
 	private void Awake()
 	{
 		if (instance == null)
@@ -119,7 +121,19 @@ public class PlayerVariables : MonoBehaviour {
 		ActivePlayers = GameObject.FindGameObjectsWithTag("Active").Length;
 		if (isReady >= ActivePlayers && ActivePlayers > 0 && SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
 		{
-			SceneManager.LoadScene(2);
+			startPanel.SetActive(true);
+			for(int i = 0; i < InputManager.Devices.Count; i++)
+			{
+				if(InputManager.Devices[i].Command.WasPressed)
+				{
+					SceneManager.LoadScene(2);
+
+				}
+			}
+		}
+		else if(SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
+		{
+			startPanel.SetActive(false);
 		}
 	}
 
