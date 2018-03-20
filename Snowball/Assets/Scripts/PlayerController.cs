@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour {
     private const float CLIMB_TIMER = .5f;
 
     private const int MAX_AMMO = 3;
+	private const float FREEZE_MAX_TIME = 5f;
     #endregion
 
     #region Private Variables
@@ -54,6 +55,9 @@ public class PlayerController : MonoBehaviour {
     GameObject blockPlace;
     GameObject tempObject;
     SnowBlockManager currentMan;
+
+	//freezing variables
+	float freezeTimer = 0;
 
     //movement
     private float movex;
@@ -86,6 +90,13 @@ public class PlayerController : MonoBehaviour {
     public player whichPlayer;
 	public Team team;
 
+	[Header("Attributes")]
+	public int ColdTotal = 2000;
+	public int wallsAround = 0;
+	public bool[] walls;
+	bool isFreezing = false;
+	bool isNearFire = false;
+
     [Header("Inventory")]
     public int ammo;
     public List<GameObject> snowballPoints;
@@ -97,6 +108,7 @@ public class PlayerController : MonoBehaviour {
     [Header("UI")]
     [SerializeField] private Slider timeSlider;
 	[SerializeField] private Slider healthSlider;
+	[SerializeField] private Slider ColdSlider;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject block;
@@ -110,6 +122,8 @@ public class PlayerController : MonoBehaviour {
 
     private void Start()
     {
+		walls = new bool[] { false, false, false, false };
+
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         PA = GetComponent<PlayerAbilities>();
         TempSpeed = speed;
@@ -118,23 +132,68 @@ public class PlayerController : MonoBehaviour {
 		tempObject = null;
         rb = GetComponent<Rigidbody>();
 
-		if(GameManager.instance.mode == GameManager.HealthMode.livesMode)
-		{
-			health = 3;
-			snowBallDamage = 1;
-		}
-		else
-		{
-			health = 100;
-			snowBallDamage = 15;
-			
-		}
+		
+		health = 5;
+		snowBallDamage = 1;
+		
+
 		MaxHealth = healthSlider.maxValue = health;
+		ColdSlider.maxValue = ColdTotal;
 	}
 
 
 	private void Update()
     {
+		wallsAround = 0;
+		walls[0] = (Physics.Raycast(transform.position, Vector3.forward, 2, 1 << 8));
+		walls[1] = (Physics.Raycast(transform.position, Vector3.right, 2, 1 << 8));
+		walls[2] = (Physics.Raycast(transform.position, Vector3.back, 2, 1 << 8));
+		walls[3] = (Physics.Raycast(transform.position, Vector3.left, 2, 1 << 8));
+
+		for(int i = 0; i < walls.Length; i++)
+		{
+			if(walls[i] == true)
+			{
+				wallsAround++;
+			}
+		}
+
+		if(health <= 0)
+		{
+			GameManager.instance.PlayerGone(team);
+		}
+
+		ColdSlider.value = ColdTotal;
+
+		if (!isNearFire)
+		{
+			ColdTotal -= wallsAround;
+
+
+			isFreezing = (ColdTotal <= 0);
+
+			if (isFreezing)
+			{
+				if (freezeTimer < FREEZE_MAX_TIME)
+				{
+					freezeTimer += Time.deltaTime;
+				}
+				else
+				{
+					freezeTimer = 0;
+					TakeDamage();
+				}
+			}
+
+		}
+		else
+		{
+			if(ColdTotal < ColdSlider.maxValue)
+			{
+				ColdTotal += 4;
+			}
+		}
+
 		healthSlider.value = health;
         isWalking = (GetComponent<Rigidbody>().velocity.x != 0 || GetComponent<Rigidbody>().velocity.z != 0);
 
@@ -277,15 +336,6 @@ public class PlayerController : MonoBehaviour {
 		}
 		#endregion
 
-		if (pControl.Command.IsPressed)
-        {
-            Application.Quit();
-            Time.timeScale = 0;
-        }
-        else
-        {
-            Time.timeScale = 1;
-        }
 
         isGrounded = (Physics.Raycast(transform.position, -Vector3.up, 1.1f));
 
@@ -425,8 +475,11 @@ public class PlayerController : MonoBehaviour {
 		}
 		if(other.tag == "Block")
 		{
-
 			transform.position = other.transform.position + Vector3.up*1;
+		}
+		if(other.tag == "Fire")
+		{
+			isNearFire = true;
 		}
     }
 
@@ -445,7 +498,12 @@ public class PlayerController : MonoBehaviour {
         {
             pickableItem = null;
         }
-    }
+		if (other.tag == "Fire")
+		{
+			isNearFire = false;
+		}
+
+	}
 
 
 

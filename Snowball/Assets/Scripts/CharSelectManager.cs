@@ -40,10 +40,12 @@ public class CharSelectManager : MonoBehaviour {
 
 	public player Player;
 	public bool isReady = false;
+	public bool isActivated = false;
 
 	#region EDITING VARS
 	[SerializeField] public Image CharPanel, background;
 	[SerializeField] public Text pName, pTeam, preset;
+	[SerializeField] private GameObject ActivatePanel;
 
 	[SerializeField] private List<Image> tiles;
 	#endregion
@@ -107,63 +109,88 @@ public class CharSelectManager : MonoBehaviour {
 			}
 		}
 		
+		if(isActivated)
+		{
+			ActivatePanel.SetActive(false);
+			this.gameObject.tag = "Active";
+		}
+		else
+		{
+			ActivatePanel.SetActive(true);
+			this.gameObject.tag = "Inactive";
+		}
+
 		CheckInput();
 	}
 
 	void CheckInput()
 	{
-		if(canMove && !isReady)
-		{
-			if (pControl.LeftStickY > .5)
+		if (isActivated)
+		{ 
+			if(pControl.Action2.WasPressed)
 			{
-				UnHighlight(tiles[selectedItem]);
-				selectedItem--;
-				if (selectedItem <= 0)
+				isActivated = false;
+			}
+			if (canMove && !isReady)
+			{
+				if (pControl.LeftStickY > .5)
 				{
-					selectedItem = 0;
+					UnHighlight(tiles[selectedItem]);
+					selectedItem--;
+					if (selectedItem <= 0)
+					{
+						selectedItem = 0;
+					}
+					HighLight(tiles[selectedItem]);
+					canMove = false;
+					Debug.Log(selectedItem);
 				}
-				HighLight(tiles[selectedItem]);
-				canMove = false;
-				Debug.Log(selectedItem);
-			}
-			else if (pControl.LeftStickY < -.5)
-			{
-				UnHighlight(tiles[selectedItem]);
-				selectedItem++;
-				if (selectedItem >= tiles.Count)
+				else if (pControl.LeftStickY < -.5)
 				{
-					selectedItem = tiles.Count - 1;
+					UnHighlight(tiles[selectedItem]);
+					selectedItem++;
+					if (selectedItem >= tiles.Count)
+					{
+						selectedItem = tiles.Count - 1;
+					}
+					HighLight(tiles[selectedItem]);
+					canMove = false;
+					Debug.Log(selectedItem);
+
 				}
-				HighLight(tiles[selectedItem]);
-				canMove = false;
-				Debug.Log(selectedItem);
 
 			}
-
-		}
-		if(pControl.Action1.WasPressed)
-		{
-			switch (selectedItem)
+			if (pControl.Action1.WasPressed)
 			{
-				case 0:
-					Debug.Log("Not done");
-					break;
-				case 1:
-					SwitchTeam();
-					break;
-				case 2:
-					SwitchColors();
-					break;
-				case 3:
-					ToggleReady();
-					break;
-				default:
-					Debug.LogError("TOO MANY TILES WHAT?");
-					break;
-			}
+				switch (selectedItem)
+				{
+					case 0:
+						Debug.Log("Not done");
+						break;
+					case 1:
+						SwitchTeam();
+						break;
+					case 2:
+						SwitchColors();
+						break;
+					case 3:
+						ToggleReady();
+						break;
+					default:
+						Debug.LogError("TOO MANY TILES WHAT?");
+						break;
+				}
 
+			}
 		}
 		
+		if(!isActivated)
+		{
+			if (pControl.Action1.WasPressed)
+			{
+				isActivated = true;
+			}
+		}
 	}
 
 	void HighLight(Image i)
@@ -229,7 +256,7 @@ public class CharSelectManager : MonoBehaviour {
 
 	void UploadInformation()
 	{
-		PlayerVariables.Player pInstance = new PlayerVariables.Player(name, team, pNum, pColor);
+		PlayerVariables.Player pInstance = new PlayerVariables.Player(name, team, pNum, pColor, isActivated);
 
 		PlayerVariables.instance.PlayerList[pNum] = pInstance;
 

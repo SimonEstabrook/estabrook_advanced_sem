@@ -11,10 +11,11 @@ public class PlayerVariables : MonoBehaviour {
 
 	public class Player
 	{
-		string name;
-		int team;
-		int controller;
-		Color pColor;
+		private string name;
+		private int team;
+		private int controller;
+		private Color pColor;
+		private bool active;
 
 		public Player()
 		{
@@ -22,14 +23,16 @@ public class PlayerVariables : MonoBehaviour {
 			team = 0;
 			controller = 0;
 			pColor = Color.white;
+			active = false;
 		}
 
-		public Player(string n, int t, int c, Color pC)
+		public Player(string n, int t, int c, Color pC, bool a)
 		{
 			name = n;
 			team = t;
 			controller = c;
 			pColor = pC;
+			active = a;
 		}
 
 		#region Getter/Setter
@@ -69,6 +72,14 @@ public class PlayerVariables : MonoBehaviour {
 		{
 			return pColor;
 		}
+		public void SetActive(bool a)
+		{
+			active = a;
+		}
+		public bool GetActive()
+		{
+			return active;
+		}
 		#endregion
 
 	}
@@ -76,6 +87,7 @@ public class PlayerVariables : MonoBehaviour {
 	public Player[] PlayerList;
 
 	public int isReady = 0;
+	public int ActivePlayers;
 
 	private void Awake()
 	{
@@ -100,7 +112,12 @@ public class PlayerVariables : MonoBehaviour {
 
 	private void Update()
 	{
-		if (isReady >= 2 && SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
+		if(SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(0))
+		{
+			Destroy(this.gameObject);
+		}
+		ActivePlayers = GameObject.FindGameObjectsWithTag("Active").Length;
+		if (isReady >= ActivePlayers && ActivePlayers > 0 && SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
 		{
 			SceneManager.LoadScene(2);
 		}

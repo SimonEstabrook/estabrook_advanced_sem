@@ -7,6 +7,9 @@ TagManager:
   - Sensor
   - Block
   - Pickup
+  - Active
+  - Inactive
+  - Fire
   layers:
   - Default
   - TransparentFX
