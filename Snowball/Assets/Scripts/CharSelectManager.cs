@@ -14,11 +14,23 @@ public class CharSelectManager : MonoBehaviour {
 		P4 = 3
 	}
 
+	public enum Screen
+	{
+		BASE_MENU = 0,
+		NAME_SELECT = 1,
+		NAME_TYPE = 2
+	}
+
+
 	//Sendable Player Variables
-	string name;
+	public string name;
 	int team;
 	public int pNum;
 	Color pColor;
+
+	public Screen whichScreen;
+	public GameObject NameScreen;
+	public GameObject typeScreen;
 
 	#region PRIVATE VARS
 	private Color32 TEAM1COLOR, TEAM2COLOR, highlightColor, readyColor;
@@ -28,13 +40,15 @@ public class CharSelectManager : MonoBehaviour {
 	public List<Color32> Team1Colors;
 	public List<Color32> Team2Colors;
 
-	private int selectedItem = 0;
+	public  int selectedItem = 0;
+	public int nameSelectCount = 0;
+	public int nameTypeCount = 0;
 	private float delay = .15f;
 
 	private int currentColor;
 
 	private float timer;
-	private bool canMove = true;
+	public bool canMove = true;
 
 	#endregion
 
@@ -48,16 +62,20 @@ public class CharSelectManager : MonoBehaviour {
 	[SerializeField] private GameObject ActivatePanel;
 
 	[SerializeField] private List<Image> tiles;
+	[SerializeField] private List<Image> nameSelectTiles;
+	[SerializeField] private List<Image> nameTypeTiles;
 	#endregion
 	
 
 	private void Awake()
 	{
 		pControl = InputManager.Devices[(int)Player];
+		Time.timeScale = 1;
 	}
 
 	void Start () {
 		name = this.gameObject.name;
+
 
 		pNum = (int)Player;
 		TEAM1COLOR = new Color32(255, 159, 159, 255);
@@ -72,6 +90,8 @@ public class CharSelectManager : MonoBehaviour {
 		Team2Colors.Add(new Color32(48, 125, 165, 255));
 
 		HighLight(tiles[selectedItem]);
+		HighLight(nameSelectTiles[nameSelectCount]);
+		HighLight(nameTypeTiles[nameTypeCount]);
 		
 	}
 	
@@ -119,8 +139,22 @@ public class CharSelectManager : MonoBehaviour {
 			ActivatePanel.SetActive(true);
 			this.gameObject.tag = "Inactive";
 		}
-
+		
 		CheckInput();
+		if(whichScreen == Screen.NAME_SELECT)
+		{
+			NameScreen.SetActive(true);
+			typeScreen.SetActive(false);
+		}
+		else if(whichScreen == Screen.BASE_MENU)
+		{
+			NameScreen.SetActive(false);
+		}
+		else
+		{
+			typeScreen.SetActive(true);
+		}
+		
 	}
 
 	void CheckInput()
@@ -129,67 +163,248 @@ public class CharSelectManager : MonoBehaviour {
 		{ 
 			if(pControl.Action2.WasPressed)
 			{
-				isActivated = false;
-			}
-			if (canMove && !isReady)
-			{
-				if (pControl.LeftStickY > .5)
+				if(isActivated)
 				{
-					UnHighlight(tiles[selectedItem]);
-					selectedItem--;
-					if (selectedItem <= 0)
+					switch (whichScreen)
 					{
-						selectedItem = 0;
+						case Screen.BASE_MENU:
+							isActivated = false;
+							break;
+						case Screen.NAME_SELECT:
+							whichScreen = Screen.BASE_MENU;
+							break;
+						case Screen.NAME_TYPE:
+							whichScreen = Screen.NAME_SELECT;
+							break;
 					}
-					HighLight(tiles[selectedItem]);
-					canMove = false;
-					Debug.Log(selectedItem);
-				}
-				else if (pControl.LeftStickY < -.5)
-				{
-					UnHighlight(tiles[selectedItem]);
-					selectedItem++;
-					if (selectedItem >= tiles.Count)
-					{
-						selectedItem = tiles.Count - 1;
-					}
-					HighLight(tiles[selectedItem]);
-					canMove = false;
-					Debug.Log(selectedItem);
 
 				}
+				
 
 			}
-			if (pControl.Action1.WasPressed)
+			switch (whichScreen)
 			{
-				switch (selectedItem)
-				{
-					case 0:
-						Debug.Log("Not done");
-						break;
-					case 1:
-						SwitchTeam();
-						break;
-					case 2:
-						SwitchColors();
-						break;
-					case 3:
-						ToggleReady();
-						break;
-					default:
-						Debug.LogError("TOO MANY TILES WHAT?");
-						break;
-				}
-
+				case Screen.BASE_MENU:
+					MainSelectScreen();
+					break;
+				case Screen.NAME_SELECT:
+					NameSelectScreen();
+					break;
+				case Screen.NAME_TYPE:
+					NameTypeScreen();
+					break;
 			}
+
+
 		}
 		
-		if(!isActivated)
+		else
 		{
 			if (pControl.Action1.WasPressed)
 			{
 				isActivated = true;
 			}
+			if(pControl.Action2.WasPressed)
+			{
+				transform.parent.gameObject.GetComponent<MenuManager>().Menu();
+				
+			}
+		}
+	}
+
+	void NameTypeScreen()
+	{
+		if (canMove && !isReady)
+		{
+			if (pControl.LeftStickX < -.5)
+			{
+
+				Debug.Log("Move Up");
+				UnHighlight(nameTypeTiles[nameTypeCount]);
+				nameTypeCount--;
+				if (nameTypeCount <= 0)
+				{
+					nameTypeCount = 0;
+				}
+				HighLight(nameTypeTiles[nameTypeCount]);
+				canMove = false;
+				Debug.Log(nameTypeCount);
+			}
+			else if (pControl.LeftStickX > .5)
+			{
+				Debug.Log("Move Down");
+				UnHighlight(nameTypeTiles[nameTypeCount]);
+				nameTypeCount++;
+				if (nameTypeCount >= nameTypeTiles.Count)
+				{
+					nameTypeCount = nameTypeTiles.Count - 1;
+				}
+				HighLight(nameTypeTiles[nameTypeCount]);
+				canMove = false;
+				Debug.Log(nameTypeCount);
+
+			}
+			
+
+		}
+		if (pControl.Action1.WasPressed)
+		{
+			switch (nameSelectCount)
+			{
+				case 0:
+					Debug.Log("Not done");
+					break;
+				case 1:
+					whichScreen = Screen.NAME_TYPE;
+					typeScreen.SetActive(true);
+					break;
+				case 2:
+					whichScreen = Screen.BASE_MENU;
+					break;
+				default:
+					Debug.LogError("TOO MANY TILES WHAT?");
+					break;
+			}
+
+		}
+	}
+
+	void NameSelectScreen()
+	{
+		if (canMove && !isReady)
+		{
+			if (pControl.LeftStickY > .5)
+			{
+				Debug.Log("Move Up");
+				UnHighlight(nameSelectTiles[nameSelectCount]);
+				nameSelectCount--;
+				if (nameSelectCount <= 0)
+				{
+					nameSelectCount = 0;
+				}
+				HighLight(nameSelectTiles[nameSelectCount]);
+				canMove = false;
+				Debug.Log(nameSelectCount);
+			}
+			else if (pControl.LeftStickY < -.5)
+			{
+				Debug.Log("Move Down");
+				UnHighlight(nameSelectTiles[nameSelectCount]);
+				nameSelectCount++;
+				if (nameSelectCount >= nameSelectTiles.Count)
+				{
+					nameSelectCount = nameSelectTiles.Count - 1;
+				}
+				HighLight(nameSelectTiles[nameSelectCount]);
+				canMove = false;
+				Debug.Log(nameSelectCount);
+
+			}
+			if (pControl.LeftStickX > .5)
+			{
+				if (nameSelectCount == 0)
+				{
+					Debug.Log("Move Right");
+					UnHighlight(nameSelectTiles[nameSelectCount]);
+					nameSelectCount = 1;
+					HighLight(nameSelectTiles[nameSelectCount]);
+					canMove = false;
+
+				}
+			}
+			if(pControl.LeftStickX < -.5)
+			{
+				if(nameSelectCount != 0)
+				{
+					Debug.Log("Move Left");
+					UnHighlight(nameSelectTiles[nameSelectCount]);
+					nameSelectCount = 0;
+					HighLight(nameSelectTiles[nameSelectCount]);
+					canMove = false;
+
+				}
+			}
+
+		}
+		if (pControl.Action1.WasPressed)
+		{
+			switch (nameSelectCount)
+			{
+				case 0:
+					Debug.Log("Not done");
+					break;
+				case 1:
+					whichScreen = Screen.NAME_TYPE;
+					typeScreen.SetActive(true);
+					break;
+				case 2:
+					whichScreen = Screen.BASE_MENU;
+					break;
+				default:
+					Debug.LogError("TOO MANY TILES WHAT?");
+					break;
+			}
+
+		}
+	}
+
+	void MainSelectScreen()
+	{
+		if (canMove && !isReady)
+		{
+			if (pControl.LeftStickY > .5)
+			{
+				Debug.Log("Move Up");
+				UnHighlight(tiles[selectedItem]);
+				selectedItem--;
+				if (selectedItem <= 0)
+				{
+					selectedItem = 0;
+				}
+				HighLight(tiles[selectedItem]);
+				canMove = false;
+				Debug.Log(selectedItem);
+			}
+			else if (pControl.LeftStickY < -.5)
+			{
+				Debug.Log("Move Down");
+				UnHighlight(tiles[selectedItem]);
+				selectedItem++;
+				if (selectedItem >= tiles.Count)
+				{
+					selectedItem = tiles.Count - 1;
+				}
+				HighLight(tiles[selectedItem]);
+				canMove = false;
+				Debug.Log(selectedItem);
+
+			}
+
+
+		}
+		if (pControl.Action1.WasPressed)
+		{
+			switch (selectedItem)
+			{
+				case 0:
+					Debug.Log("Not done");
+					//whichScreen = Screen.NAME_SELECT;
+					//NameScreen.SetActive(true);
+					break;
+				case 1:
+					SwitchTeam();
+					break;
+				case 2:
+					SwitchColors();
+					break;
+				case 3:
+					ToggleReady();
+					break;
+				default:
+					Debug.LogError("TOO MANY TILES WHAT?");
+					break;
+			}
+
 		}
 	}
 
@@ -261,6 +476,7 @@ public class CharSelectManager : MonoBehaviour {
 		PlayerVariables.instance.PlayerList[pNum] = pInstance;
 
 	}
+
 
 
 }

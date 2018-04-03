@@ -27,17 +27,32 @@ public class PlayerAbilities : MonoBehaviour {
     {
         if(PC.currentItem != PlayerController.items.nothing)
         {
-            GameObject droppedItem = Instantiate(PC.itemPrefabs[(int)PC.currentItem], transform.position, PC.itemPrefabs[(int)PC.currentItem].transform.rotation);
-			if (PC.currentItem == PlayerController.items.Snowball)
+			if (PC.currentItem == PlayerController.items.Snowball && PC.onStack)
 			{
+				PC.pickableItem.GetComponent<StackManager>().AddSnowBall();
 				PC.ammo--;
-				droppedItem.GetComponent<SnowballManager>().enabled = false;
+				PC.currentItem = PlayerController.items.nothing;
+				PC.blockPlace.transform.parent = transform;
+				PC.GiveObject(0);
 			}
+			else
+			{
+				GameObject droppedItem = Instantiate(PC.itemPrefabs[(int)PC.currentItem], transform.position, PC.itemPrefabs[(int)PC.currentItem].transform.rotation);
+				if (PC.currentItem == PlayerController.items.Snowball)
+				{
+					PC.ammo--;
+					droppedItem.GetComponent<SnowballManager>().enabled = false;
+				}
+				else if (PC.currentItem == PlayerController.items.Sled)
+				{
+					droppedItem.GetComponent<StackManager>().count = PC.stackCount;
+				}
 
-			droppedItem.GetComponent<Rigidbody>().AddForce(Vector3.up * 1000);
-            PC.currentItem = PlayerController.items.nothing;
-            PC.GiveObject(0);
-            crunchSound.GetComponent<AudioSource>().Play();
+				droppedItem.GetComponent<Rigidbody>().AddForce(Vector3.up * 1000);
+				PC.currentItem = PlayerController.items.nothing;
+				PC.GiveObject(0);
+				crunchSound.GetComponent<AudioSource>().Play();
+			}
         }
         else
         {
@@ -49,7 +64,16 @@ public class PlayerAbilities : MonoBehaviour {
                 }else if(PC.pickableItem.name.Contains("Snowball"))
                 {
                     PC.currentItem = PlayerController.items.Snowball;
-                }
+                }else if(PC.pickableItem.name.Contains("HeldBlock"))
+				{
+					Debug.Log("BLOCK CHECK");
+					PC.currentItem = PlayerController.items.SnowBrick;
+				}
+				else if(PC.pickableItem.name.Contains("Stack"))
+				{
+					PC.currentItem = PlayerController.items.Sled;
+					PC.stackCount = PC.pickableItem.GetComponent<StackManager>().count;
+				}
                 PC.GiveObject((int)PC.currentItem);
                 Destroy(PC.pickableItem.gameObject);
                 crunchSound.GetComponent<AudioSource>().Play();
@@ -58,11 +82,6 @@ public class PlayerAbilities : MonoBehaviour {
         }
     }
 
-    public void Craft()
-    {
-        PC.currentItem = PlayerController.items.Snowball;
-        PC.GiveObject((int)PC.currentItem);        
-    }
 
     public void Throw()
     {
@@ -109,6 +128,7 @@ public class PlayerAbilities : MonoBehaviour {
 
         PC.currentItem = PlayerController.items.nothing;
 
+
         //check for duplicates
         for (int i = 0; i < BlockManager.instance.blocks.Count; i++)
 		{
@@ -137,7 +157,10 @@ public class PlayerAbilities : MonoBehaviour {
         }
         crunchSound.GetComponent<AudioSource>().Play();
         PC.GiveObject((int)PC.currentItem);
-
+		if(PC.currentItem == PlayerController.items.nothing)
+		{
+			PC.blockPlace.transform.parent = transform;
+		}
     }
 
 

@@ -15,6 +15,8 @@ public class SnowBlockManager : MonoBehaviour {
     public bool isDestroyed = false;
     public bool scrolledOver = false;
 
+	public GameObject snowPile;
+
 	[SerializeField] List<Material> snowLevels;
 
     private void Start()
@@ -199,6 +201,11 @@ public class SnowBlockManager : MonoBehaviour {
             }
         }
     }
+
+	public void SpawnSnow()
+	{
+		Instantiate(snowPile, transform.position, snowPile.transform.rotation);
+	}
 
 
     

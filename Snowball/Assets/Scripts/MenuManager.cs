@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MenuManager : MonoBehaviour {
 
@@ -51,5 +52,21 @@ public class MenuManager : MonoBehaviour {
 	{
 		SceneManager.LoadScene(0);
 	}
+	public void Resume()
+	{
+		Time.timeScale = 1;
+		this.gameObject.SetActive(false);
+		GameManager.instance.isPaused = false;
+
+	}
+
+	#region Options Menu
+	public void Mute()
+	{
+
+
+	}
+
+	#endregion
 
 }

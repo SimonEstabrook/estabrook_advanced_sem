@@ -706,9 +706,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 0
-  serializedVersion: 3
+  serializedVersion: 2
   m_Convex: 0
-  m_CookingOptions: 14
+  m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300006, guid: 16955ea6376b9ba44a0b608aba918301, type: 3}
 --- !u!64 &64219264364454514
@@ -720,9 +720,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 0
-  serializedVersion: 3
+  serializedVersion: 2
   m_Convex: 0
-  m_CookingOptions: 14
+  m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300002, guid: 16955ea6376b9ba44a0b608aba918301, type: 3}
 --- !u!64 &64465215892830632
@@ -734,9 +734,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 0
-  serializedVersion: 3
+  serializedVersion: 2
   m_Convex: 0
-  m_CookingOptions: 14
+  m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300004, guid: 16955ea6376b9ba44a0b608aba918301, type: 3}
 --- !u!64 &64643536350505928
@@ -748,9 +748,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 0
-  serializedVersion: 3
+  serializedVersion: 2
   m_Convex: 0
-  m_CookingOptions: 14
+  m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 16955ea6376b9ba44a0b608aba918301, type: 3}
 --- !u!65 &65340549202306728
@@ -802,6 +802,7 @@ MonoBehaviour:
   baseCube: {fileID: 1608444661221172}
   isDestroyed: 0
   scrolledOver: 0
+  snowPile: {fileID: 1683256429454068, guid: bf08fd1fa4fcdf5418def049fcb7d600, type: 2}
   snowLevels:
   - {fileID: 2100000, guid: 779721ce85b60e74aa0372542182f36b, type: 2}
   - {fileID: 2100000, guid: d0f6ac1c4aa7c554fba08d1a6fee0b3e, type: 2}

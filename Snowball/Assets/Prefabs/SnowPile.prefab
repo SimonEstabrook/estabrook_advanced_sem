@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 23456166180421108}
   - component: {fileID: 54692022483285584}
   - component: {fileID: 65451033680115038}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SnowPile
   m_TagString: Pickup
   m_Icon: {fileID: 0}

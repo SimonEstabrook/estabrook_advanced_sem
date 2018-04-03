@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4798701559696074}
   - component: {fileID: 198408624023130990}
   - component: {fileID: 199351433545452534}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4887905504548452}
   - component: {fileID: 33059554271745848}
   - component: {fileID: 23051944371913466}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Cube_002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4008113129117860}
   - component: {fileID: 33684793103347860}
   - component: {fileID: 23496828375999422}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4587291347742842}
   - component: {fileID: 135399297476617924}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Fire
   m_TagString: Fire
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 4725103528037120}
   - component: {fileID: 33664561371882116}
   - component: {fileID: 23064549851057558}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Cube_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4292867420218966}
   - component: {fileID: 108169876418867012}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Point light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,8 +121,24 @@ GameObject:
   - component: {fileID: 4092974566885630}
   - component: {fileID: 198976245480003258}
   - component: {fileID: 199114594204724542}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Particle System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1913728472275474
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4729855755884278}
+  - component: {fileID: 65584412801406380}
+  m_Layer: 14
+  m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,7 +190,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1275759558216372}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 33.7, y: 3.4, z: 22.8}
+  m_LocalPosition: {x: 33.7, y: 3.4, z: 35.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4008113129117860}
@@ -183,6 +199,7 @@ Transform:
   - {fileID: 4798701559696074}
   - {fileID: 4092974566885630}
   - {fileID: 4292867420218966}
+  - {fileID: 4729855755884278}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -198,6 +215,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4587291347742842}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4729855755884278
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1913728472275474}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.187, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4587291347742842}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4798701559696074
 Transform:
@@ -348,6 +378,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1193564218766536}
   m_Mesh: {fileID: 4300004, guid: 43e4e954efb43fe4ba447729f52f8345, type: 3}
+--- !u!65 &65584412801406380
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1913728472275474}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!108 &108169876418867012
 Light:
   m_ObjectHideFlags: 1
@@ -391,7 +433,7 @@ SphereCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1275759558216372}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 5
@@ -2023,7 +2065,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
   NoiseModule:
-    enabled: 1
+    enabled: 0
     strength:
       serializedVersion: 2
       minMaxState: 0

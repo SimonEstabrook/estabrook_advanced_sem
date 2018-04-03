@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using InControl;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 
 public class GameManager : MonoBehaviour {
@@ -111,7 +112,7 @@ public class GameManager : MonoBehaviour {
 			Time.timeScale = 0;
 			ResultsScreen.SetActive(true);
 
-			ResultsScreen.transform.GetChild(2).gameObject.GetComponent<Text>().text = (T1 > 0 ? "Team 1" : "Team2") + " won the game!";
+			ResultsScreen.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().SetText((T1 > 0 ? "Team 1" : "Team 2") + " won the game!");
 		}
 
         checkDebug();

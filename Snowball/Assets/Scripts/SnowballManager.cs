@@ -29,7 +29,17 @@ public class SnowballManager : MonoBehaviour {
 			else if (other.tag == "Block")
 			{
 				Debug.Log("Hit Wall");
+				other.GetComponent<SnowBlockManager>().SpawnSnow();
+				other.GetComponent<BoxCollider>().enabled = false;
+				other.GetComponent<SnowBlockManager>().destroyCube();
+				other.GetComponent<SnowBlockManager>().isDestroyed = true;
+
+
 				Destroy(this.gameObject);
+
+			}
+			else if(other.tag == "Fire")
+			{
 
 			}
 			else
