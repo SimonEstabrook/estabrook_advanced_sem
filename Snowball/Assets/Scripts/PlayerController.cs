@@ -406,7 +406,8 @@ public class PlayerController : MonoBehaviour {
     {
 		if (currentUI != null)
 		{
-			Destroy(currentUI.gameObject);
+			//Destroy(currentUI.gameObject);
+			currentUI.gameObject.SetActive(false);
 		}
 		ShootUI.SetActive(false);
 		if (currentObject != null)
