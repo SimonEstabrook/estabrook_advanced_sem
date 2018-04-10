@@ -96,7 +96,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4290574457890868}
   - component: {fileID: 33176029868482760}
-  - component: {fileID: 65298860380220026}
   - component: {fileID: 23146492031742290}
   m_Layer: 9
   m_Name: Cube
@@ -186,6 +185,8 @@ GameObject:
   - component: {fileID: 82466378456689130}
   - component: {fileID: 65745594447728694}
   - component: {fileID: 114439506550813720}
+  - component: {fileID: 65579635470426098}
+  - component: {fileID: 136894301209616904}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -307,7 +308,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1858650187490706}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 28.06, y: 0, z: 1}
+  m_LocalPosition: {x: 15.27, y: 4, z: 0.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4186982904381996}
@@ -484,18 +485,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!65 &65298860380220026
+--- !u!65 &65579635470426098
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1386235817722022}
+  m_GameObject: {fileID: 1858650187490706}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.5, y: 1, z: 0.5}
+  m_Center: {x: 0, y: -0.5, z: 0}
 --- !u!65 &65745594447728694
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -688,7 +689,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1858650187490706}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6337f8c81d8fe184887243a7f86dbc86, type: 3}
   m_Name: 
@@ -708,6 +709,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
+  currentBlock: {fileID: 0}
   blockPlace: {fileID: 0}
   pickableItem: {fileID: 0}
   isAiming: 0
@@ -715,11 +717,12 @@ MonoBehaviour:
   speed: 9
   isJumping: 1
   whichPlayer: 0
-  team: 0
+  team: 1
   launchNumber: 9000
   ColdTotal: 2000
   wallsAround: 0
   walls: 
+  onGround: 0
   freezeParticles: {fileID: 198295033255810454}
   ammo: 0
   snowballPoints:
@@ -753,6 +756,19 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
+  m_Height: 1.54
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.22, z: 0}
+--- !u!136 &136894301209616904
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1858650187490706}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.29
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}

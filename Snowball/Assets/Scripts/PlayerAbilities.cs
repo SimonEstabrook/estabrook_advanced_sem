@@ -29,11 +29,14 @@ public class PlayerAbilities : MonoBehaviour {
         {
 			if (PC.currentItem == PlayerController.items.Snowball && PC.onStack)
 			{
-				PC.pickableItem.GetComponent<StackManager>().AddSnowBall();
-				PC.ammo--;
-				PC.currentItem = PlayerController.items.nothing;
-				PC.blockPlace.transform.parent = transform;
-				PC.GiveObject(0);
+				if (PC.pickableItem.GetComponent<StackManager>().count < 10)
+				{
+					PC.pickableItem.GetComponent<StackManager>().AddSnowBall();
+					PC.ammo--;
+					PC.currentItem = PlayerController.items.nothing;
+					PC.blockPlace.transform.parent = transform;
+					PC.GiveObject(0);
+				}
 			}
 			else
 			{
@@ -89,6 +92,7 @@ public class PlayerAbilities : MonoBehaviour {
         GameObject snowballInstance = Instantiate(PC.itemPrefabs[(int)PC.currentItem], PC.heldPoint.transform.position, transform.rotation);
 		snowballInstance.GetComponent<SnowballManager>().dropped = false;
 		snowballInstance.GetComponent<SnowballManager>().team = PC.team;
+		snowballInstance.GetComponent<ParticleSystem>().Play();
 		Rigidbody instRB = snowballInstance.GetComponent<Rigidbody>();
         instRB.useGravity = false;
         instRB.AddForce(transform.forward * 1500);

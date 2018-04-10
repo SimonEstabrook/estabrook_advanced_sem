@@ -22,6 +22,7 @@ public class MenuNavigation : MonoBehaviour {
 
 	private void Start()
 	{
+		Time.timeScale = 1;
 		HighLightColor = new Color32(66, 244, 229, 255);
 		Debug.Log(InputManager.Devices.Count);
 	}
@@ -51,12 +52,12 @@ public class MenuNavigation : MonoBehaviour {
 		
 		for (int i = 0; i < InputManager.Devices.Count; i++)
 		{
-			if(InputManager.Devices[i].LeftStickY > .5 && canMove)
+			if((InputManager.Devices[i].LeftStickY > .5  || InputManager.Devices[i].DPadUp.WasPressed) && canMove)
 			{
 				index--;
 				canMove = false;
 			}
-			if(InputManager.Devices[i].LeftStickY < -.5 && canMove)
+			if((InputManager.Devices[i].LeftStickY < -.5 || InputManager.Devices[i].DPadDown.WasPressed)&& canMove)
 			{
 				index++;
 				canMove = false;

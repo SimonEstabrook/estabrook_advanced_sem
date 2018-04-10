@@ -50,9 +50,10 @@ public class PlayerController : MonoBehaviour {
 	[HideInInspector] public float health;
 	private float MaxHealth;
 	private int snowBallDamage;
+	private float iTimer = 0;
 
     //snowblock variables
-    private GameObject currentBlock;
+    public GameObject currentBlock;
     [HideInInspector] public GameObject blockPlace;
     GameObject tempObject;
     SnowBlockManager currentMan;
@@ -83,6 +84,7 @@ public class PlayerController : MonoBehaviour {
 	public bool isAiming = false;
 	public bool onStack = false;
 	private bool isRunning = false;
+	private bool isHit = false;
 
     #endregion
 
@@ -101,6 +103,7 @@ public class PlayerController : MonoBehaviour {
 	public bool[] walls;
 	bool isFreezing = false;
 	bool isNearFire = false;
+	public bool onGround = false;
 	public ParticleSystem freezeParticles;
 
     [Header("Inventory")]
@@ -127,11 +130,20 @@ public class PlayerController : MonoBehaviour {
 
     private void Awake()
     {
-        pControl = InputManager.Devices[(int)whichPlayer];
+		if (InputManager.Devices.Count < (int)whichPlayer+ 1)
+		{
+			this.gameObject.SetActive(false);
+			healthSlider.gameObject.transform.parent.gameObject.SetActive(false);
+		}
+		else
+		{
+			pControl = InputManager.Devices[(int)whichPlayer];
 
-    }
+		}
 
-    private void Start()
+	}
+
+	private void Start()
     {
 		walls = new bool[] { false, false, false, false };
 
@@ -244,18 +256,28 @@ public class PlayerController : MonoBehaviour {
 
                 currentBlock = snow.transform.gameObject;
 
-                currentBlock.GetComponent<SnowBlockManager>().Highlight();
+                //currentBlock.GetComponent<SnowBlockManager>().Highlight();
                 if (tempObject != currentBlock && tempObject != null)
                 {
-                    tempObject.GetComponent<SnowBlockManager>().UnHighlight();
+                    //tempObject.GetComponent<SnowBlockManager>().UnHighlight();
                 }
             }
+
+			if (snow.transform.gameObject.tag == "Ground")
+			{
+				onGround = true;
+
+			}
+			else
+			{
+				onGround = false;
+			}
 		}
 
         #region ACTIONS
         tempObject = currentBlock;
         currentMan = currentBlock.GetComponent<SnowBlockManager>();
-		if(pControl.Action4.WasPressed && wait)
+		if((pControl.Action4.WasPressed || pControl.Action2.WasPressed) && wait)
 		{
 			wait = false;
 			isPickingUp = false;
@@ -264,7 +286,7 @@ public class PlayerController : MonoBehaviour {
 			isPlacing = false;
 			timer = 0;
 		}
-        else if (((pControl.Action3.WasPressed && !wait) || isPickingUp) && currentItem == items.nothing)
+        else if ((((pControl.Action1.WasPressed || pControl.Action3.WasPressed) && !wait) || isPickingUp) && currentItem == items.nothing && !onGround)
         {
             if (timer < PICKUP_TIMER)
             {
@@ -285,7 +307,7 @@ public class PlayerController : MonoBehaviour {
 
             }
         }
-        else if (((pControl.Action2.WasPressed && !wait) || isCreating) && currentItem == items.SnowPile)
+        else if ((((pControl.Action3.WasPressed || pControl.RightTrigger.WasPressed)&& !wait) || isCreating) && currentItem == items.SnowPile)
         {
             if (timer < SNOWBALL_TIMER)
             {
@@ -307,7 +329,7 @@ public class PlayerController : MonoBehaviour {
 
             }
         }
-        else if (((pControl.Action3.WasPressed && !wait) || isPlacing) && currentItem == items.SnowPile)
+        else if ((((pControl.LeftTrigger.WasPressed || pControl.Action1.WasPressed)&& !wait) || isPlacing) && currentItem == items.SnowPile)
         {
             if (timer < WALL_TIMER)
             {
@@ -329,7 +351,7 @@ public class PlayerController : MonoBehaviour {
 
             }
         }
-        else if(pControl.Action1.WasPressed && !wait && onStack)
+        else if(pControl.RightBumper.WasPressed && !wait && onStack)
         {
 			if(pickableItem.GetComponent<StackManager>().count > 0)
 			{
@@ -339,32 +361,36 @@ public class PlayerController : MonoBehaviour {
 			}
             
         }
-		else if (pControl.Action4.IsPressed && isAiming)
+		else if(pControl.LeftBumper.WasPressed && !wait && onStack && currentItem == items.Snowball)
+		{
+			PA.Drop();
+		}
+		else if ((pControl.Action4.IsPressed || pControl.Action2.IsPressed) && isAiming)
 		{
 			isAiming = false;
 		}
-		else if (pControl.Action4.WasPressed && !wait && !isAiming)
+		else if ((pControl.Action4.WasPressed || pControl.Action2.WasPressed) && !wait && !isAiming)
         {
             PA.Drop();
         }
-		else if((pControl.Action2.IsPressed) && currentItem == items.Snowball && !wait)
+		else if((pControl.RightTrigger.IsPressed || pControl.Action3.IsPressed) && currentItem == items.Snowball && !wait && !GameManager.instance.isBuildMode)
 		{
 			isAiming = true;
 		}
-        else if((pControl.Action2.WasReleased) && currentItem == items.Snowball && !wait && isAiming)
+        else if((pControl.RightTrigger.WasReleased || pControl.Action3.WasReleased) && currentItem == items.Snowball && !wait && isAiming && !GameManager.instance.isBuildMode)
         {
             Debug.Log("Throw");
             PA.Throw();
 			isAiming = false;
-        }else if((pControl.Action3.WasPressed && !wait) && currentItem == items.SnowBrick)
+        }else if(((pControl.LeftTrigger.WasPressed || pControl.Action1.WasPressed) && !wait) && currentItem == items.SnowBrick)
 		{
 			PA.PlaceBlock(block, currentUI);
 
-		}else if((pControl.Action1.IsPressed))
+		}else if((pControl.LeftStick.IsPressed))
 		{
 			//speed = speed * 1.5f;
 			isRunning = true;
-		}else if((pControl.Action1.WasReleased))
+		}else if((pControl.LeftStick.WasReleased))
 		{
 			//speed = TempSpeed;
 			isRunning = false;
@@ -399,7 +425,17 @@ public class PlayerController : MonoBehaviour {
 
         UpdateHUD();
         
-		
+		if(isHit)
+		{
+			if(iTimer <= 1)
+			{
+				iTimer += Time.deltaTime;
+			}
+			else
+			{
+				isHit = false;
+			}
+		}
     }
     
     public void GiveObject(int n)
@@ -433,7 +469,7 @@ public class PlayerController : MonoBehaviour {
 					currentObject = Instantiate(itemPrefabs[n], heldPoint.transform.position, Quaternion.identity);
 					currentObject.GetComponent<SnowballManager>().enabled = false;
                     currentObject.GetComponent<Rigidbody>().isKinematic = true;
-                    currentObject.GetComponent<TrailRenderer>().enabled = false;
+					//currentObject.GetComponent<ParticleSystem>().Stop();
                     ammo++;
 
 					ShootUI.SetActive(true);
@@ -505,7 +541,7 @@ public class PlayerController : MonoBehaviour {
 
 		if (!isGrounded)
 		{
-			if (!isJumping && !isRunning)
+			if (!isJumping)
 			{
 				if (movey == 0)
 				{
@@ -515,15 +551,12 @@ public class PlayerController : MonoBehaviour {
 				speed = 5;
 
 			}
-			else if (!isRunning)
+			else
 			{
 				movey = 1;
 				v = 15;
 			}
-			else
-			{
 			
-			}
         }
         else
         {
@@ -550,7 +583,11 @@ public class PlayerController : MonoBehaviour {
 
 	public void TakeDamage()
 	{
-		health -= snowBallDamage;
+		if(!isHit)
+		{
+			health -= snowBallDamage;
+		}
+		isHit = true;
 	}
 
     private void OnTriggerEnter(Collider other)
@@ -605,6 +642,7 @@ public class PlayerController : MonoBehaviour {
 		}
 
 	}
+
 
 
 

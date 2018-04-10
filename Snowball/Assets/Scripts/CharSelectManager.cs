@@ -69,7 +69,15 @@ public class CharSelectManager : MonoBehaviour {
 
 	private void Awake()
 	{
-		pControl = InputManager.Devices[(int)Player];
+		if(InputManager.Devices.Count  < (int)Player +1)
+		{
+			this.gameObject.SetActive(false);
+		}
+		else
+		{
+			pControl = InputManager.Devices[(int)Player];
+
+		}
 		Time.timeScale = 1;
 	}
 
@@ -352,7 +360,7 @@ public class CharSelectManager : MonoBehaviour {
 	{
 		if (canMove && !isReady)
 		{
-			if (pControl.LeftStickY > .5)
+			if (pControl.LeftStickY > .5 || pControl.DPadUp.WasPressed)
 			{
 				Debug.Log("Move Up");
 				UnHighlight(tiles[selectedItem]);
@@ -365,7 +373,7 @@ public class CharSelectManager : MonoBehaviour {
 				canMove = false;
 				Debug.Log(selectedItem);
 			}
-			else if (pControl.LeftStickY < -.5)
+			else if (pControl.LeftStickY < -.5 || pControl.DPadDown.WasPressed)
 			{
 				Debug.Log("Move Down");
 				UnHighlight(tiles[selectedItem]);

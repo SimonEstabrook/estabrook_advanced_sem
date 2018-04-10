@@ -30,6 +30,13 @@ public class GameManager : MonoBehaviour {
 	public bool GameOver = false;
 	public bool isPaused = false;
 
+	//Build Mode Stuff
+	float buildTimer = 0;
+	int buildEnd = 60;
+	Text timerText;
+	float flashTimer = .5f;
+	public bool canSee = true;
+
 	[Header("Player Info")]
 	public List<GameObject> Players;
 	public List<GameObject> Team1, Team2;
@@ -43,6 +50,9 @@ public class GameManager : MonoBehaviour {
 	[Header("Prefabs")]
 	public GameObject PauseMenu;
 	public GameObject ResultsScreen;
+	public GameObject BuildScreen;
+	public bool isBuildMode;
+	public GameObject PrepWall;
 
     [Header("Debugs")]
     public bool seeNodes = false;
@@ -66,6 +76,14 @@ public class GameManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+
+		buildTimer = buildEnd;
+
+		timerText = BuildScreen.transform.GetChild(0).gameObject.GetComponent<Text>();
+
+		BuildScreen.SetActive(true);
+
+		isBuildMode = true;
 
 		T1 = Team1.Count;
 		T2 = Team2.Count;
@@ -95,7 +113,42 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 
-		if(isPaused)
+		if(isBuildMode)
+		{
+			if(Input.GetKeyDown(KeyCode.S))
+			{
+				buildTimer = 0;
+			}
+
+			if(buildTimer >= 0)
+			{
+				buildTimer-=Time.deltaTime;
+				if(flashTimer >= 0)
+				{
+					flashTimer-= Time.deltaTime;
+				}
+				else
+				{
+					flashTimer = .5f;
+					canSee = canSee ? false : true;
+				}
+				timerText.gameObject.SetActive(canSee);
+			}
+			else
+			{
+				isBuildMode = false;
+				BuildScreen.SetActive(false);
+			}
+			timerText.text = "Prepare for Battle!\n" + ((int)(buildTimer)).ToString();
+
+		}
+		else
+		{
+			PrepWall.SetActive(false);
+		}
+
+
+		if (isPaused)
 		{
 			Time.timeScale = 0;
 			PauseMenu.SetActive(true);
@@ -121,7 +174,7 @@ public class GameManager : MonoBehaviour {
 			if(timer <= 5)
 			{
 				timer += Time.deltaTime;
-
+				
 			}
 			else
 			{

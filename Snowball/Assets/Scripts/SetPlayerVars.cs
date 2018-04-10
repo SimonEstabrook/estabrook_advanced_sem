@@ -28,6 +28,16 @@ public class SetPlayerVars : MonoBehaviour {
 			HUDBackground.color = PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetPColor();
 			//Add player to game manager
 			GameManager.instance.AddPlayer(this.gameObject, PC.team);
+
+			if(PC.team == PlayerController.Team.Team1)
+			{
+				transform.position = new Vector3(Random.Range(1, 16), 4, Random.Range(0, 25));
+			}
+			else
+			{
+				transform.position = new Vector3(Random.Range(32, 48), 4, Random.Range(0, 25));
+
+			}
 		}
 		else
 		{

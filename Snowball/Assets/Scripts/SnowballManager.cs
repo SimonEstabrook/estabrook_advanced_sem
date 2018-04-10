@@ -7,6 +7,8 @@ public class SnowballManager : MonoBehaviour {
 	public PlayerController.Team team;
 	public bool dropped = true;
 
+	public ParticleSystem explodeParticles;
+
     private void Start()
     {
 		if(!dropped)
@@ -24,6 +26,8 @@ public class SnowballManager : MonoBehaviour {
 			{
 				Debug.Log("PlayerHit");
 				other.gameObject.GetComponent<PlayerController>().TakeDamage();
+				Instantiate(explodeParticles, transform.position, explodeParticles.transform.rotation);
+
 				Destroy(this.gameObject);
 			}
 			else if (other.tag == "Block")
@@ -34,6 +38,7 @@ public class SnowballManager : MonoBehaviour {
 				other.GetComponent<SnowBlockManager>().destroyCube();
 				other.GetComponent<SnowBlockManager>().isDestroyed = true;
 
+				Instantiate(explodeParticles, transform.position, explodeParticles.transform.rotation);
 
 				Destroy(this.gameObject);
 
@@ -42,9 +47,10 @@ public class SnowballManager : MonoBehaviour {
 			{
 
 			}
-			else
+			else if(tag != "Pickup")
 			{
 				Debug.Log("Hit boundry");
+				Instantiate(explodeParticles, transform.position, explodeParticles.transform.rotation);
 				Destroy(this.gameObject);
 			}
 
