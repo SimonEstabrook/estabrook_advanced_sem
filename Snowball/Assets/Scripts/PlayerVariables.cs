@@ -110,6 +110,7 @@ public class PlayerVariables : MonoBehaviour {
 		{
 			PlayerList[i] = new Player();
 		}
+
 	}
 
 	private void Update()
@@ -121,7 +122,7 @@ public class PlayerVariables : MonoBehaviour {
 		ActivePlayers = GameObject.FindGameObjectsWithTag("Active").Length;
 		if (isReady >= ActivePlayers && ActivePlayers > 0 && SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
 		{
-			startPanel.SetActive(true);
+			//startPanel.SetActive(true);
 			for(int i = 0; i < InputManager.Devices.Count; i++)
 			{
 				if(InputManager.Devices[i].Command.WasPressed)
@@ -133,7 +134,7 @@ public class PlayerVariables : MonoBehaviour {
 		}
 		else if(SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
 		{
-			startPanel.SetActive(false);
+			//startPanel.SetActive(false);
 		}
 	}
 

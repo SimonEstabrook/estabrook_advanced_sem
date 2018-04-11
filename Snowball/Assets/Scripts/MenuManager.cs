@@ -10,6 +10,7 @@ public class MenuManager : MonoBehaviour {
 
 	[SerializeField] private GameObject OptionsMenu, MainMenu;
 
+
 	private void Start()
 	{
 		if(SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(0))

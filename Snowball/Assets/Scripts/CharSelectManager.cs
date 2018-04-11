@@ -69,11 +69,11 @@ public class CharSelectManager : MonoBehaviour {
 
 	private void Awake()
 	{
-		if(InputManager.Devices.Count  < (int)Player +1)
+		//if(InputManager.Devices.Count  < (int)Player +1)
 		{
-			this.gameObject.SetActive(false);
+			//this.gameObject.SetActive(false);
 		}
-		else
+		//else
 		{
 			pControl = InputManager.Devices[(int)Player];
 
@@ -465,14 +465,14 @@ public class CharSelectManager : MonoBehaviour {
 		{
 			isReady = false;
 			HighLight(tiles[selectedItem]);
-			PlayerVariables.instance.Unready();
+			CharSelectReadyManager.instance.Unready();
 		}
 		else
 		{
 			isReady = true;
 			HighLight(tiles[selectedItem]);
 			UploadInformation();
-			PlayerVariables.instance.ReadyUp();
+			CharSelectReadyManager.instance.ReadyUp();
 
 		}
 	}

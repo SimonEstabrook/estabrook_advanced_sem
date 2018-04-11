@@ -11,6 +11,7 @@ TagManager:
   - Inactive
   - Fire
   - Ground
+  - StartPanel
   layers:
   - Default
   - TransparentFX

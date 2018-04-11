@@ -30,4 +30,4 @@ Material:
     - _GradientStrengthModifier: 1.8
     - _Solid: 1
     m_Colors:
-    - _OutlineCol: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineCol: {r: 0.63235295, g: 0.63235295, b: 0.63235295, a: 1}
