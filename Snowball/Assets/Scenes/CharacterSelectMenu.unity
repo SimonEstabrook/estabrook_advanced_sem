@@ -4289,6 +4289,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1150599708965c429a8a9bed0d031ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isReady: 0
+  ActivePlayers: 0
+  startPanel: {fileID: 0}
 --- !u!4 &111478235
 Transform:
   m_ObjectHideFlags: 0
@@ -6086,9 +6089,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 2
   m_Convex: 0
-  m_CookingOptions: 14
+  m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &157120521
@@ -20786,6 +20789,49 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 545000700}
   m_Mesh: {fileID: 4300016, guid: c334ab062f85f7d469aa3d571b3c1806, type: 3}
+--- !u!1 &549211103
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 549211105}
+  - component: {fileID: 549211104}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &549211104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 549211103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9de2f0258c1bdc443a3eda40619ec165, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isReady: 0
+  startPanel: {fileID: 386539793}
+  ActivePlayers: 0
+--- !u!4 &549211105
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 549211103}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 51.747086, y: 12.623108, z: 0.020698547}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &549545758
 GameObject:
   m_ObjectHideFlags: 0
@@ -45558,7 +45604,6 @@ Camera:
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
@@ -67308,7 +67353,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1849639855}
   - component: {fileID: 1849639856}
-  - component: {fileID: 1849639857}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -67357,20 +67401,6 @@ MonoBehaviour:
   nativeInputOverrideUpdateRate: 0
   nativeInputUpdateRate: 0
   customProfiles: []
---- !u!114 &1849639857
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1849639854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9de2f0258c1bdc443a3eda40619ec165, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isReady: 0
-  startPanel: {fileID: 386539793}
-  ActivePlayers: 0
 --- !u!1 &1852653084
 GameObject:
   m_ObjectHideFlags: 0
