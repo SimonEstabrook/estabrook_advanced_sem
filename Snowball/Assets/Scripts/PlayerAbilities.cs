@@ -93,6 +93,7 @@ public class PlayerAbilities : MonoBehaviour {
 		snowballInstance.GetComponent<SnowballManager>().dropped = false;
 		snowballInstance.GetComponent<SnowballManager>().team = PC.team;
 		snowballInstance.GetComponent<ParticleSystem>().Play();
+		snowballInstance.GetComponent<AudioSource>().Play();
 		Rigidbody instRB = snowballInstance.GetComponent<Rigidbody>();
         instRB.useGravity = false;
         instRB.AddForce(transform.forward * 1500);

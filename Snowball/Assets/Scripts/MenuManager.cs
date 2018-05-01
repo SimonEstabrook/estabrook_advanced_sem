@@ -25,9 +25,13 @@ public class MenuManager : MonoBehaviour {
 		Debug.Log("Quitting game...");
 		Application.Quit();
 	}
-	public void CharSelect()
+	public void CharSelectPvP()
 	{
 		SceneManager.LoadScene(1);
+	}
+	public void CharSelectSurvival()
+	{
+		SceneManager.LoadScene(3);
 	}
 	public void Options()
 	{

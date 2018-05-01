@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 114745468591452636}
   - component: {fileID: 65461511105672286}
   - component: {fileID: 54521377486634974}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Stack
   m_TagString: Pickup
   m_Icon: {fileID: 0}
@@ -265,7 +265,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1870671964253084}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 27.31, y: 4.98, z: 5.54}
+  m_LocalPosition: {x: 40.2, y: 3, z: 3.71}
   m_LocalScale: {x: 1.833701, y: 1.8337017, z: 1.8337017}
   m_Children:
   - {fileID: 4372528015879752}
@@ -925,4 +925,4 @@ MonoBehaviour:
   - {fileID: 1070412450615162}
   - {fileID: 1664056832858650}
   - {fileID: 1006294738950412}
-  count: 4
+  count: 10

@@ -30,14 +30,22 @@ public class CharSelectReadyManager : MonoBehaviour {
 	void Update () {
 		ActivePlayers = GameObject.FindGameObjectsWithTag("Active").Length;
 
-		if (isReady >= ActivePlayers && ActivePlayers > 0 && SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
+		if (isReady >= ActivePlayers && ActivePlayers > 0 && (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1) || SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(3)))
 		{
 			startPanel.SetActive(true);
 			for (int i = 0; i < InputManager.Devices.Count; i++)
 			{
 				if (InputManager.Devices[i].Command.WasPressed)
 				{
-					SceneManager.LoadScene(2);
+					if(SceneManager.GetActiveScene().buildIndex == 1)
+					{
+						SceneManager.LoadScene(2);
+
+					}
+					else
+					{
+						SceneManager.LoadScene(4);
+					}
 
 				}
 			}

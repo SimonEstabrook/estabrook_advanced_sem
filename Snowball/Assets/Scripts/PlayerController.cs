@@ -99,10 +99,10 @@ public class PlayerController : MonoBehaviour {
 
 	[Header("Attributes")]
 	public int ColdTotal = 2000;
-	public int wallsAround = 0;
+	public float wallsAround = 0;
 	public bool[] walls;
 	bool isFreezing = false;
-	bool isNearFire = false;
+	public bool isNearFire = false;
 	public bool onGround = false;
 	public ParticleSystem freezeParticles;
 
@@ -118,6 +118,7 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField] private GameObject currentUI;
 	public int stackCount;
 
+	public AudioSource grunt;
 
 	[Header("UI")]
     [SerializeField] private Slider timeSlider;
@@ -156,12 +157,13 @@ public class PlayerController : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
 
 		
-		health = 5;
-		snowBallDamage = 1;
+		health = 100;
+		snowBallDamage = 15;
 		
 
 		MaxHealth = healthSlider.maxValue = health;
-		ColdSlider.maxValue = ColdTotal;
+		ColdSlider.maxValue = health;
+		healthSlider.gameObject.SetActive(false);
 	}
 
 
@@ -186,7 +188,7 @@ public class PlayerController : MonoBehaviour {
 		{
 			if(walls[i] == true)
 			{
-				wallsAround++;
+				wallsAround += .03f;
 			}
 		}
 
@@ -196,11 +198,11 @@ public class PlayerController : MonoBehaviour {
 			this.gameObject.SetActive(false);
 		}
 
-		ColdSlider.value = ColdTotal;
+		ColdSlider.value = health;
 
 		if (!isNearFire)
 		{
-			ColdTotal -= wallsAround;
+			health -= wallsAround;
 
 
 			isFreezing = (ColdTotal <= 0);
@@ -222,9 +224,9 @@ public class PlayerController : MonoBehaviour {
 		}
 		else
 		{
-			if(ColdTotal < ColdSlider.maxValue)
+			if(health < ColdSlider.maxValue)
 			{
-				ColdTotal += 4;
+				health += .2f;
 			}
 		}
 
@@ -586,6 +588,7 @@ public class PlayerController : MonoBehaviour {
 		if(!isHit)
 		{
 			health -= snowBallDamage;
+			grunt.Play();
 		}
 		isHit = true;
 	}
@@ -594,12 +597,24 @@ public class PlayerController : MonoBehaviour {
     {
 		if(other.gameObject.name.Contains("Snowball"))
 		{
-			if(other.GetComponent<SnowballManager>().team != team && other.GetComponent<SnowballManager>().team != Team.None)
+			if((other.GetComponent<SnowballManager>().team != team && other.GetComponent<SnowballManager>().team != Team.None)) 
 			{
-				Vector3 dir = other.GetComponent<Rigidbody>().velocity.normalized * launchNumber;
-				rb.AddForce(dir + (Vector3.up * launchNumber / 2));
+				Debug.Log("knockback");
+				Vector3 dir = (transform.position - other.transform.position).normalized * launchNumber;
+				rb.AddForce(dir);
+				rb.AddForce(Vector3.up * launchNumber / 2);
 
 			}
+
+		}
+		if(other.gameObject.tag == "Snowman")
+		{
+			//launchNumber *= 2;
+			Debug.Log("knockback");
+			Vector3 dir = (transform.position - other.transform.position).normalized * launchNumber;
+			rb.AddForce(dir);
+			rb.AddForce(Vector3.up * launchNumber / 2);
+			//launchNumber /= 2;
 
 		}
 		if (other.tag == "Pickup")
@@ -616,6 +631,7 @@ public class PlayerController : MonoBehaviour {
 		}
 		if(other.tag == "Fire")
 		{
+			Debug.Log("Near Fire");
 			isNearFire = true;
 		}
     }

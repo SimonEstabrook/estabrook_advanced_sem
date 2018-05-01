@@ -26,34 +26,41 @@ public class SnowballManager : MonoBehaviour {
 			{
 				Debug.Log("PlayerHit");
 				other.gameObject.GetComponent<PlayerController>().TakeDamage();
-				Instantiate(explodeParticles, transform.position, explodeParticles.transform.rotation);
-
-				Destroy(this.gameObject);
+				KillSnowball();
 			}
 			else if (other.tag == "Block")
 			{
 				Debug.Log("Hit Wall");
+				other.GetComponent<AudioSource>().Play();
 				other.GetComponent<SnowBlockManager>().SpawnSnow();
 				other.GetComponent<BoxCollider>().enabled = false;
 				other.GetComponent<SnowBlockManager>().destroyCube();
 				other.GetComponent<SnowBlockManager>().isDestroyed = true;
 
-				Instantiate(explodeParticles, transform.position, explodeParticles.transform.rotation);
-
-				Destroy(this.gameObject);
-
+				KillSnowball();
 			}
-			else if(other.tag == "Fire")
+			else if (other.tag == "FireHitbox" && team != other.GetComponent<FireManager>().whichTeam)
 			{
-
+				other.GetComponent<FireManager>().LoseHealth();
+				KillSnowball();
 			}
-			else if(tag != "Pickup")
+			else if (tag == "Snowman")
+			{
+				KillSnowball();
+			}
+			else if (tag != "Pickup")
 			{
 				Debug.Log("Hit boundry");
-				Instantiate(explodeParticles, transform.position, explodeParticles.transform.rotation);
-				Destroy(this.gameObject);
+				KillSnowball();
 			}
 
 		}
+	}
+
+	public void KillSnowball()
+	{
+		Instantiate(explodeParticles, transform.position, explodeParticles.transform.rotation);
+		Destroy(this.gameObject);
+
 	}
 }

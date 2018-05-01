@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using InControl;
+using UnityEngine.SceneManagement;
 
 public class CharSelectManager : MonoBehaviour {
 
@@ -83,7 +84,7 @@ public class CharSelectManager : MonoBehaviour {
 
 	void Start () {
 		name = this.gameObject.name;
-
+		team = 0;
 
 		pNum = (int)Player;
 		TEAM1COLOR = new Color32(255, 159, 159, 255);
@@ -93,9 +94,14 @@ public class CharSelectManager : MonoBehaviour {
 
 		Team1Colors.Add(new Color32(244, 152, 66, 255));
 		Team1Colors.Add(new Color32(252, 61, 40, 255));
+		Team1Colors.Add(new Color32(255, 38, 0, 255));
+		Team1Colors.Add(new Color32(255, 105, 180, 255));
 
 		Team2Colors.Add(new Color32(48, 165, 93, 255));
 		Team2Colors.Add(new Color32(48, 125, 165, 255));
+		Team2Colors.Add(new Color32(170, 0, 255, 255));
+		Team2Colors.Add(new Color32(0, 246, 255, 255));
+
 
 		HighLight(tiles[selectedItem]);
 		HighLight(nameSelectTiles[nameSelectCount]);
@@ -107,7 +113,11 @@ public class CharSelectManager : MonoBehaviour {
 	void Update () {
 		if(team == 0)
 		{
-			pTeam.text = "Red Team";
+			if(pTeam.text != null)
+			{
+				pTeam.text = "Red Team";
+
+			}
 			CharPanel.color = Team1Colors[currentColor];
 			pColor = Team1Colors[currentColor];
 			background.color = TEAM1COLOR;
@@ -115,7 +125,11 @@ public class CharSelectManager : MonoBehaviour {
 		}
 		else
 		{
-			pTeam.text = "Blue Team";
+			if(pTeam.text != null)
+			{
+				pTeam.text = "Blue Team";
+
+			}
 			CharPanel.color = Team2Colors[currentColor];
 			pColor = Team2Colors[currentColor];
 			background.color = TEAM2COLOR;
@@ -257,6 +271,7 @@ public class CharSelectManager : MonoBehaviour {
 		}
 		if (pControl.Action1.WasPressed)
 		{
+
 			switch (nameSelectCount)
 			{
 				case 0:
@@ -392,25 +407,43 @@ public class CharSelectManager : MonoBehaviour {
 		}
 		if (pControl.Action1.WasPressed)
 		{
-			switch (selectedItem)
+			if (SceneManager.GetActiveScene().buildIndex == 1)
 			{
-				case 0:
-					Debug.Log("Not done");
-					//whichScreen = Screen.NAME_SELECT;
-					//NameScreen.SetActive(true);
-					break;
-				case 1:
-					SwitchTeam();
-					break;
-				case 2:
-					SwitchColors();
-					break;
-				case 3:
-					ToggleReady();
-					break;
-				default:
-					Debug.LogError("TOO MANY TILES WHAT?");
-					break;
+
+
+				switch (selectedItem)
+				{
+					case 0:
+						Debug.Log("Not done");
+						//whichScreen = Screen.NAME_SELECT;
+						//NameScreen.SetActive(true);
+						break;
+					case 1:
+						SwitchTeam();
+						break;
+					case 2:
+						SwitchColors();
+						break;
+					case 3:
+						ToggleReady();
+						break;
+					default:
+						Debug.LogError("TOO MANY TILES WHAT?");
+						break;
+				}
+			}
+			else
+			{
+				switch (selectedItem)
+				{
+					case 0:
+						SwitchColors();
+						break;
+					case 1:
+						ToggleReady();
+						break;
+				}
+
 			}
 
 		}

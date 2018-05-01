@@ -14,3 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: 4139c5fdaa610b542b42fc79ba9bcee2
+  - enabled: 1
+    path: Assets/Scenes/CharSelectMenuSurvival.unity
+    guid: c4730b0d302d14e4996968abe4a53e43
+  - enabled: 1
+    path: Assets/Scenes/PvE.unity
+    guid: 32d5c3ecf5d4e3742966489d196188db

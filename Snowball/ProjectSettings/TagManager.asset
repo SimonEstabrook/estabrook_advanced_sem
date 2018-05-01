@@ -12,6 +12,8 @@ TagManager:
   - Fire
   - Ground
   - StartPanel
+  - FireHitbox
+  - Snowman
   layers:
   - Default
   - TransparentFX
@@ -28,9 +30,9 @@ TagManager:
   - Snowball
   - Highlighted
   - Fire
-  - 
-  - 
-  - 
+  - Trees
+  - Snowman
+  - UnCheck
   - 
   - 
   - 

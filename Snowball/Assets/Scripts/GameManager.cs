@@ -18,7 +18,8 @@ public class GameManager : MonoBehaviour {
 	public enum GameMode
 	{
 		Co_op = 0,
-		PvP = 1
+		PvP = 1,
+		PvE = 2
 	}
 
 
@@ -107,7 +108,7 @@ public class GameManager : MonoBehaviour {
 			{
 				isPaused = !isPaused;
 			}
-			if((isPaused || GameOver) && InputManager.Devices[i].RightTrigger.IsPressed && InputManager.Devices[i].LeftTrigger.IsPressed && InputManager.Devices[i].Action1.IsPressed)
+			if((isPaused || GameOver) && InputManager.Devices[i].Action1.IsPressed)
 			{
 				SceneManager.LoadScene(0);
 			}
@@ -144,7 +145,11 @@ public class GameManager : MonoBehaviour {
 		}
 		else
 		{
-			PrepWall.SetActive(false);
+			if(gMode != GameMode.PvE)
+			{
+				PrepWall.SetActive(false);
+
+			}
 		}
 
 
@@ -165,7 +170,11 @@ public class GameManager : MonoBehaviour {
 			Time.timeScale = 0;
 			ResultsScreen.SetActive(true);
 
-			ResultsScreen.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().SetText((T1 > 0 ? "Team 1" : "Team 2") + " won the game!");
+			if(SceneManager.GetActiveScene().buildIndex != 4)
+			{
+				ResultsScreen.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().SetText((T1 > 0 ? "Team 1" : "Team 2") + " won the game!");
+
+			}
 		}
 
         checkDebug();
@@ -220,13 +229,16 @@ public class GameManager : MonoBehaviour {
 
 	void SetMode()
 	{
-		if (T1 > 0 && T2 > 0)
+		if (gMode != GameMode.PvE)
 		{
-			gMode = GameMode.PvP;
-		}
-		else
-		{
-			gMode = GameMode.Co_op;
+			if (T1 > 0 && T2 > 0)
+			{
+				gMode = GameMode.PvP;
+			}
+			else
+			{
+				gMode = GameMode.Co_op;
+			}
 		}
 
 	}
@@ -254,6 +266,7 @@ public class GameManager : MonoBehaviour {
 		{
 			T2--;
 		}
+		
 	}
 
 	public void AddPlayer(GameObject g, PlayerController.Team t)

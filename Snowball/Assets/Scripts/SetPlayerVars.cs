@@ -16,33 +16,38 @@ public class SetPlayerVars : MonoBehaviour {
 	{
 		PC = GetComponent<PlayerController>();
 		MR = GetComponent<MeshRenderer>();
-		if(PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetActive())
+		if (PlayerVariables.instance != null)
 		{
-			//Set Team
-			PC.team = (PlayerController.Team)PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetTeam() + 1;
-			//Change Name
-			PlayerName.text = PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetName();
-			//Change Player Color
-			MR.material.color = PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetPColor();
-			//Change HUD background color
-			HUDBackground.color = PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetPColor();
-			//Add player to game manager
-			GameManager.instance.AddPlayer(this.gameObject, PC.team);
-
-			if(PC.team == PlayerController.Team.Team1)
+			if (PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetActive())
 			{
-				transform.position = new Vector3(Random.Range(1, 16), 4, Random.Range(0, 25));
+
+				//Set Team
+				PC.team = (PlayerController.Team)PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetTeam() + 1;
+				//Change Name
+				PlayerName.text = PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetName();
+				//Change Player Color
+				MR.material.color = PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetPColor();
+				//Change HUD background color
+				HUDBackground.color = PlayerVariables.instance.PlayerList[(int)PC.whichPlayer].GetPColor();
+				//Add player to game manager
+
+				if (PC.team == PlayerController.Team.Team1)
+				{
+					transform.position = new Vector3(Random.Range(1, 16), 4, Random.Range(0, 25));
+				}
+				else
+				{
+					transform.position = new Vector3(Random.Range(32, 48), 4, Random.Range(0, 25));
+
+				}
 			}
 			else
 			{
-				transform.position = new Vector3(Random.Range(32, 48), 4, Random.Range(0, 25));
-
+				this.gameObject.SetActive(false);
+				HUD.SetActive(false);
 			}
 		}
-		else
-		{
-			this.gameObject.SetActive(false);
-			HUD.SetActive(false);
-		}
+		GameManager.instance.AddPlayer(this.gameObject, PC.team);
+
 	}
 }
